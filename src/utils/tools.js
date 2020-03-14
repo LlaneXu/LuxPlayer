@@ -18,3 +18,12 @@ export const secondToString = (time) => {
   const second = Math.floor(time%60);
   return `${minute>10? minute:(`0${minute}`)}:${second>9?second:(`0${second}`)}`
 };
+
+export function getRandomIntBetween(min: number, max: number) {
+  return Math.floor(Math.random() * (max-min+1))+min;
+}
+
+
+export function switchItems(list: Array, indexA: number, indexB: number) {
+  [list[indexA], list[indexB]] = [list[indexB], list[indexA]]
+}

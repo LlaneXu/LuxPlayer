@@ -13,7 +13,7 @@
 
  ***/
 import { combineReducers } from 'redux';
-import { PLAYER } from "./actions";
+import { PLAYER, CONTROL } from "./actions";
 
 const player = (state={}, action) =>  {
   switch (action.type) {
@@ -26,6 +26,23 @@ const player = (state={}, action) =>  {
   }
 };
 
+const control = (state={}, action) =>  {
+  switch (action.type) {
+    case CONTROL.MODE:
+      return {...state, mode: action.data.mode};
+    case CONTROL.PLAY_LIST:
+      console.log(action);
+      return {...state, playList: action.data.playList};
+    case CONTROL.PLAYED_LIST:
+      return {...state, playedList: action.data.playedList};
+    case CONTROL.CURRENT_INDEX:
+      return {...state, currentIndex: action.data.currentIndex};
+    default:
+      return {...state};
+  }
+};
+
 export default combineReducers({
   player,
+  control,
 })

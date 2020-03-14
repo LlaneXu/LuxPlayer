@@ -21,6 +21,7 @@ import {
   View
 } from 'react-native';
 import { Provider } from 'react-redux';
+// import { Provider as ProvideAnt } from '@ant-design/react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 

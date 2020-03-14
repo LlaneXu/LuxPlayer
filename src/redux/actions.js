@@ -17,3 +17,10 @@ export const PLAYER = {
   SONG_ID: 'SONG_ID',
   SONG_STATUS: 'SONG_STATUS',
 };
+
+export const CONTROL = {
+  MODE: 'MODE',
+  PLAY_LIST: 'PLAY_LIST',
+  PLAYED_LIST: 'PLAYED_LIST',
+  CURRENT_INDEX: 'CURRENT_INDEX',
+};

@@ -24,18 +24,51 @@ import {
   Button,
   Body,
   Title,
-  // Icon,
-  Footer,
 } from "native-base";
 import Icon from 'react-native-vector-icons/Ionicons';
+import IconMateriallcons from 'react-native-vector-icons/MaterialIcons';
 import Slider from 'react-native-slider';
 import { connect } from 'react-redux';
-import { screen } from '../utils'
+
+import { screen } from '../utils';
+import { playOrPause, playNext, playPrev, changeMode, seek } from './control';
 
 class PlayerView extends PureComponent {
   state = {
     showLyric: false,
+    sliderProgress: 0,
+    sliding: false,
+    playing: false
   };
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const {player} = nextProps;
+    if (!prevState.sliding) {
+      const updateData = {};
+      if (player.sliderProgress !== prevState.sliderProgress) {
+        updateData.sliderProgress = player.sliderProgress;
+      }
+      if (player.playing !== prevState.playing) {
+        updateData.playing = player.playing;
+      }
+      return updateData;
+    }
+    return null;
+
+  }
+  componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+    if (this.state.playing !== prevState.playing) {
+      this.animateControl(this.state.playing);
+    }
+  }
+
+  componentDidMount(): void {
+    const {player} = this.props;
+    this.setState({
+      playing: player.playing,
+    });
+    this.animateControl(player.playing);
+  }
+
   constructor() {
     super();
     this.animatedValue = new Animated.Value(0);
@@ -46,7 +79,42 @@ class PlayerView extends PureComponent {
       showLyric: !this.state.showLyric
     })
   };
+  animateControl = (playing) => {
+    this.circling(playing);
+    this.topAnimate(playing);
+  };
 
+  circling = (start=true) => {
+    if (start) {
+      Animated.timing(this.animatedValue, {
+        toValue: 1,
+        duration: 24000,
+        easing: Easing.linear
+      }).start((o) => {
+        if (o.finished)
+        {
+          this.animatedValue.setValue(0);
+          this.circling(true);
+        }
+      });
+    } else {
+      this.animatedValue.stopAnimation();
+    }
+  };
+  topAnimate = (playing) => {
+    let start = 1;
+    let end = 0;
+    if (playing) {
+      start = 0;
+      end = 1;
+    }
+    this.animatedTop.setValue(start);
+    Animated.timing(this.animatedTop, {
+      toValue: end,
+      duration: 500,
+      easing: Easing.linear
+    }).start();
+  };
   cdView = () => {
     const interpolatedAnimation = this.animatedValue.interpolate({
       inputRange: [0, 1],
@@ -97,6 +165,8 @@ class PlayerView extends PureComponent {
     );
   };
   render(): React.ReactNode {
+    const { player, control } = this.props;
+    const { sliderProgress } = this.state;
     return (
       <View style={styles.container}>
         <Image
@@ -119,22 +189,6 @@ class PlayerView extends PureComponent {
               </Button>
             </Right>
           </Header>
-          {/*
-          <View style={styles.headerContainer}>
-            <TouchableOpacity
-              // onPress={this.goBack}
-            >
-              <Icon name="ios-arrow-back" size={25} color={color.white}/>
-            </TouchableOpacity>
-            <View style={{justifyContent: 'space-between', alignItems: 'center'}}>
-              <Normal color={color.white}>{params.name}</Normal>
-              <Tip color={color.white} style={{fontSize: 9}}>{params.artists}</Tip>
-            </View>
-            <TouchableOpacity onPress={this.test}>
-              <Icon name="ios-redo" size={25} color={color.white}/>
-            </TouchableOpacity>
-          </View>
-          */}
           <TouchableOpacity
             style={styles.cdContainer}
             onPress={this.showLyric}
@@ -161,7 +215,7 @@ class PlayerView extends PureComponent {
           <View style={styles.sliderBtn}>
             <Left>
               <Text style={{color: 'white'}}>
-              03:11
+              {player.currentTimeReadable}
               </Text>
             </Left>
             <Body>
@@ -171,35 +225,38 @@ class PlayerView extends PureComponent {
               thumbStyle={styles.thumb}
               trackStyle={{height: 2}}
               style={{width: screen.width - 100}}
-              // value={currentPlay.sliderProgress}
-              value={0.3}
-              // onValueChange={value => this.sliderChange(value)}
+              value={sliderProgress}
+              onSlidingStart={ () => {this.setState({sliding: true})}}
+              onSlidingComplete={value => {this.setState({sliding: false});seek(value);}}
             />
             </Body>
             <Right>
               <Text style={{color: 'white'}}>
-              05:22
+                {player.durationReadable}
               </Text>
             </Right>
           </View>
           <View style={styles.controlBtn}>
-            <Button transparent>
-              <Icon name="ios-repeat" size={30} color={'white'}/>
+            <Button transparent onPress={changeMode}>
+              {control.mode === 'cycle' && <IconMateriallcons name="repeat" size={30} color={'white'}/>}
+              {control.mode === 'random' && <IconMateriallcons name="shuffle" size={30} color={'white'}/>}
+              {control.mode === 'cycleOne' && <IconMateriallcons name="repeat-one" size={30} color={'white'}/>}
             </Button>
-            <Button transparent>
+            <Button transparent onPress={playPrev}>
               <Icon name="ios-skip-backward" size={30} color={'white'}/>
             </Button>
-            <Button transparent>
-              <Icon name="ios-pause" size={60} color={'white'}/>
+            <Button transparent onPress={playOrPause}>
+            {player.playing ? (
+                <IconMateriallcons name="pause" size={80} color={'white'}/>
+            ) : (
+                <IconMateriallcons name="play-arrow" size={80} color={'white'}/>
+            )}
             </Button>
-            <Button transparent>
-              <Icon name="ios-play" size={60} color={'white'}/>
-            </Button>
-            <Button transparent>
+            <Button transparent onPress={()=> playNext()}>
               <Icon name="ios-skip-forward" size={30} color={'white'}/>
             </Button>
             <Button transparent>
-              <Icon name="ios-list" size={30} color={'white'}/>
+              <IconMateriallcons name="format-list-bulleted" size={30} color={'white'}/>
             </Button>
           </View>
         </View>
@@ -256,10 +313,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
+    marginBottom: 10,
   }
 });
 
-export default connect( ({player}) => ({
+export default connect( ({player, control}) => ({
   player,
+  control,
 })
 )(PlayerView);

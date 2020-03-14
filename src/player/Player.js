@@ -23,39 +23,40 @@ import {
 import {connect} from 'react-redux';
 import { PLAYER } from '../redux/actions';
 import {secondToString} from '../utils/tools';
-import {playOrPause, playSong, seek} from './control'
+import { updateRef, playOrPause, playSong, seek, playNext } from './control'
 
 
 class Player extends PureComponent {
   state = {
     url: null,  // used to define whether to start a new audio
-    seekPos: null, // used to response a seek action
+    // seekPos: null, // used to response a seek action
   };
   /* big hole here, better not to use. */
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   console.log(nextProps, prevState);
-  //   if (nextProps.player.id !== prevState.id) {
-  //     const ret = {
-  //       id: nextProps.player.id,
-  //     };
-  //     console.log('getDerivedStateFromProps: ', ret);
-  //     return ret
-  //   } else {
-  //     return null;
-  //   }
-  // }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    console.log(nextProps, prevState);
+    if (nextProps.player.url !== prevState.url) {
+      const ret = {
+        url: nextProps.player.url,
+      };
 
-  testurl=[
-    'http://biliblue.com/static/music/%E8%96%9B%E4%B9%8B%E8%B0%A6/%E7%BB%85%E5%A3%AB/%E8%96%9B%E4%B9%8B%E8%B0%A6%20-%20%E6%BC%94%E5%91%98.m4a',
-    'http://music.163.com/song/media/outer/url?id=1425818683.mp3',
-  ];
-  i=0;
-  getUrl(id, platform) {
-    const url = this.testurl[this.i];
-    this.i++;
-    if (this.i>=this.testurl.length) this.i=0
-    return url;
+      console.log('getDerivedStateFromProps: ', ret);
+      return ret
+    } else {
+      return null;
+    }
   }
+  //
+  // testurl=[
+  //   'http://biliblue.com/static/music/%E8%96%9B%E4%B9%8B%E8%B0%A6/%E7%BB%85%E5%A3%AB/%E8%96%9B%E4%B9%8B%E8%B0%A6%20-%20%E6%BC%94%E5%91%98.m4a',
+  //   'http://music.163.com/song/media/outer/url?id=1425818683.mp3',
+  // ];
+  // i=0;
+  // getUrl(id, platform) {
+  //   const url = this.testurl[this.i];
+  //   this.i++;
+  //   if (this.i>=this.testurl.length) this.i=0
+  //   return url;
+  // }
   onLoadStart = (data) => {
     console.log('onLoadStart',data)
   };
@@ -112,11 +113,12 @@ class Player extends PureComponent {
     });
     this.setState({playing:true})
   };
-  onEnd = (data) => {
+  onEnd = () => {
     /*
     isExternalPlaybackActive	boolean	Boolean indicating whether external playback mode is active
      */
-    console.log('onEnd', data)
+    console.log('onEnd')
+    playNext(false);
   };
   onError = (data) => {
     console.log('onError', data)
@@ -143,9 +145,12 @@ class Player extends PureComponent {
     }
   };
   render() {
-    // const { url } = this.state;
+    const { url } = this.state;
     const {player} = this.props;
-    this.onSeek();
+    // this.onSeek();
+    console.log('url:',url)
+    console.log('player.playing:',player.playing)
+    // console.log('playering',player.playing)
     return (
       <View>
         {/*
@@ -179,31 +184,31 @@ class Player extends PureComponent {
           playOrPause();
         }}/>
         */}
-        {player.url && (
-          <Video
-            source={{uri: player.url}}
-            // poster={'https://baconmockup.com/300/200/'} // An image to display while the video is loading
-            // controls={true}                         // Determines whether to show player controls.
-            ref={(ref) => this.ref = ref}
-            rate={1.0}                              // 0 is paused, 1 is normal.
-            volume={1.0}                            // 0 is muted, 1 is normal.
-            muted={false}                           // Mutes the audio entirely.
-            paused={!player.playing}                     // Pauses playback entirely.
-            resizeMode="cover"                      // Fill the whole screen at aspect ratio.*
-            repeat={false}                           // Repeat forever.
-            playInBackground                        // Audio continues to play when app entering background.
-            playWhenInactive={false}                // [iOS] Video continues to play when control or notification center are shown.
-            progressUpdateInterval={250.0}          // [iOS] Interval to fire onProgress (default to ~250ms)
-            ignoreSilentSwitch={"ignore"}           // [iOS] ignore | obey - When 'ignore', audio will still play with the iOS hard silent switch set to silent. When 'obey', audio will toggle with the switch. When not specified, will inherit audio settings as usual.
-            onLoadStart={this.onLoadStart}            // Callback when video starts to load
-            onLoad={this.onLoad}               // Callback when video loads
-            onProgress={this.onProgress}               // Callback every ~250ms with currentTime
-            onEnd={this.onEnd}                      // Callback when playback finishes
-            onError={this.onError}               // Callback when video cannot be loaded
-            onBuffer={this.onBuffer}                // Callback when remote video is buffering
-            onTimedMetadata={this.onTimedMetadata}  // Callback when the stream receive some metadata
-            style={{width: 100, height: 100}}
-          />
+        {!!url && (
+        <Video
+          source={{uri: url}}
+          // poster={'https://baconmockup.com/300/200/'} // An image to display while the video is loading
+          // controls={true}                         // Determines whether to show player controls.
+          ref={(ref) => updateRef(ref)}
+          rate={1.0}                              // 0 is paused, 1 is normal.
+          volume={1.0}                            // 0 is muted, 1 is normal.
+          muted={false}                           // Mutes the audio entirely.
+          paused={!player.playing}                     // Pauses playback entirely.
+          resizeMode="cover"                      // Fill the whole screen at aspect ratio.*
+          repeat={true}                           // Repeat forever.
+          playInBackground                 // Audio continues to play when app entering background.
+          playWhenInactive={false}                // [iOS] Video continues to play when control or notification center are shown.
+          progressUpdateInterval={250.0}          // [iOS] Interval to fire onProgress (default to ~250ms)
+          ignoreSilentSwitch={"ignore"}           // [iOS] ignore | obey - When 'ignore', audio will still play with the iOS hard silent switch set to silent. When 'obey', audio will toggle with the switch. When not specified, will inherit audio settings as usual.
+          onLoadStart={this.onLoadStart}            // Callback when video starts to load
+          onLoad={this.onLoad}               // Callback when video loads
+          onProgress={this.onProgress}               // Callback every ~250ms with currentTime
+          onEnd={this.onEnd}                      // Callback when playback finishes
+          onError={this.onError}               // Callback when video cannot be loaded
+          onBuffer={this.onBuffer}                // Callback when remote video is buffering
+          onTimedMetadata={this.onTimedMetadata}  // Callback when the stream receive some metadata
+          style={{width: 0, height: 0}}
+        />
         )}
       </View>
     );
