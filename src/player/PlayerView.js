@@ -15,7 +15,16 @@
 
 import React, { PureComponent } from 'react';
 import {
-  View, StyleSheet, Image, ImageBackground, TouchableOpacity, Animated, Easing, Text, ScrollView
+  View,
+  StyleSheet,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+  Animated,
+  Easing,
+  Text,
+  Modal,
+  ScrollView
 } from 'react-native';
 import {
   Header,
@@ -38,7 +47,8 @@ class PlayerView extends PureComponent {
     showLyric: false,
     sliderProgress: 0,
     sliding: false,
-    playing: false
+    playing: false,
+    songListVisible: false,
   };
   static getDerivedStateFromProps(nextProps, prevState) {
     const {player} = nextProps;
@@ -166,7 +176,7 @@ class PlayerView extends PureComponent {
   };
   render(): React.ReactNode {
     const { player, control } = this.props;
-    const { sliderProgress } = this.state;
+    const { sliderProgress, songListVisible } = this.state;
     return (
       <View style={styles.container}>
         <Image
@@ -255,11 +265,23 @@ class PlayerView extends PureComponent {
             <Button transparent onPress={()=> playNext()}>
               <Icon name="ios-skip-forward" size={30} color={'white'}/>
             </Button>
-            <Button transparent>
+            <Button transparent onPress={() => this.setState({songListVisible: !songListVisible})}>
               <IconMateriallcons name="format-list-bulleted" size={30} color={'white'}/>
             </Button>
           </View>
         </View>
+        {songListVisible &&
+        <View
+          style={{display:'absolute'}}
+        >
+          <Text>yes here</Text>
+          <Left  style={{flex:1}}/>
+          <Body  style={{flex:1}}/>
+          <Right style={{flex:1}}>
+            <Text>just a modal</Text>
+          </Right>
+        </View>
+        }
       </View>
     )
   }
