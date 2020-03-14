@@ -148,6 +148,7 @@ class Player extends PureComponent {
     this.onSeek();
     return (
       <View>
+        {/*
         <Button title={'update'} onPress={() => {
           playSong(this.getUrl());
           // this.props.dispatch({
@@ -174,6 +175,10 @@ class Player extends PureComponent {
         <Button title={'test'} onPress={() => {
           playOrPause();
         }}/>
+        <Button title={'path'} onPress={() => {
+          playOrPause();
+        }}/>
+        */}
         {player.url && (
           <Video
             source={{uri: player.url}}

@@ -21,10 +21,14 @@ import {
   View
 } from 'react-native';
 import { Provider } from 'react-redux';
-import screen from './utils/screen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import PlayerView from './player/PlayerView';
 
 import { store } from './redux/stores';
 import Player from "./player/Player";
+import { screen } from './utils';
 
 
 // import { createStore } from 'redux';
@@ -46,12 +50,37 @@ const styles = StyleSheet.create({
   }
 });
 
+
+const Stack = createStackNavigator();
+function Navigator() {
+  return (
+    <Stack.Navigator
+      headerBackTitle={'返回'}
+      headerTintColor={'#333333'}
+      showIcon={true}
+      headerMode={'screen'}
+    >
+      {/*<Stack.Screen*/}
+        {/*name={'Tab'}*/}
+        {/*component={BottomTab}*/}
+        {/*options={headerTest}*/}
+      {/*/>*/}
+      <Stack.Screen name={'PlayerView'} component={PlayerView} options={{headerShown: false}}/>
+      {/*<Stack.Screen name={'Player'} component={PlayerScene} options={{headerShown: false}}/>*/}
+      {/*<Stack.Screen name={'MvDetail'} component={MvDetail} />*/}
+      {/*<Stack.Screen name={'UserDetail'} component={UserDetail} />*/}
+      {/*<Stack.Screen name={'DjDetail'} component={DjDetail} />*/}
+    </Stack.Navigator>
+  );
+}
 class Main extends PureComponent {
   render() {
     return (
       <Provider store={store}>
         <View style={{flex:1}}>
-          <Text>test something here</Text>
+          <NavigationContainer>
+            <Navigator />
+          </NavigationContainer>
           <Player/>
         </View>
       </Provider>
