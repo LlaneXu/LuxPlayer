@@ -30,8 +30,10 @@ export let store = createStore(reducer, {
   },
   control: {
     mode: 'cycle', //  random | cycle | cycleOne
+    historyList: [],
+    lastList: [],
     playList: [],
-    playedList: [],
+    playIndex: [],
     currentIndex: 0,
   }
 });

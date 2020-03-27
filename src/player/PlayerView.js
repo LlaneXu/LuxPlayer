@@ -24,7 +24,8 @@ import {
   Easing,
   Text,
   Modal,
-  ScrollView
+  ScrollView,
+  FlatList,
 } from 'react-native';
 import {
   Header,
@@ -36,11 +37,17 @@ import {
 } from "native-base";
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMateriallcons from 'react-native-vector-icons/MaterialIcons';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import Slider from 'react-native-slider';
+import BottomSheet from 'reanimated-bottom-sheet';
 import { connect } from 'react-redux';
 
 import { screen } from '../utils';
 import { playOrPause, playNext, playPrev, changeMode, seek } from './control';
+import RepeatMode from '../widget/RepeatMode';
+// import PopUp from '../widget/PopUp';
+import { modeOptions } from '../redux/stores';
+import PlayList from "../widget/PlayList";
 
 class PlayerView extends PureComponent {
   state = {
@@ -174,6 +181,7 @@ class PlayerView extends PureComponent {
       </View>
     );
   };
+  popUp = React.createRef();
   render(): React.ReactNode {
     const { player, control } = this.props;
     const { sliderProgress, songListVisible } = this.state;
@@ -247,11 +255,7 @@ class PlayerView extends PureComponent {
             </Right>
           </View>
           <View style={styles.controlBtn}>
-            <Button transparent onPress={changeMode}>
-              {control.mode === 'cycle' && <IconMateriallcons name="repeat" size={30} color={'white'}/>}
-              {control.mode === 'random' && <IconMateriallcons name="shuffle" size={30} color={'white'}/>}
-              {control.mode === 'cycleOne' && <IconMateriallcons name="repeat-one" size={30} color={'white'}/>}
-            </Button>
+            <RepeatMode size={30} color={'white'}/>
             <Button transparent onPress={playPrev}>
               <Icon name="ios-skip-backward" size={30} color={'white'}/>
             </Button>
@@ -265,23 +269,48 @@ class PlayerView extends PureComponent {
             <Button transparent onPress={()=> playNext()}>
               <Icon name="ios-skip-forward" size={30} color={'white'}/>
             </Button>
-            <Button transparent onPress={() => this.setState({songListVisible: !songListVisible})}>
+            <Button transparent onPress={() => this.popUp.current.snapTo(0)}>
               <IconMateriallcons name="format-list-bulleted" size={30} color={'white'}/>
             </Button>
           </View>
+          <BottomSheet
+          ref={this.popUp}
+          snapPoints={[400,0]}
+          initialSnap={0}
+          renderContent={() => <PlayList/>}
+          // renderHeader={() =>
+          //   <View style={{
+          //     height: 50,
+          //     flexDirection: 'row',
+          //     alignItems: 'center',
+          //     justifyContent: 'space-around',
+          //     backgroundColor: "white",
+          //     borderColor: 'grey',
+          //     borderBottomWidth: 1,
+          //     // borderWidth: 1,
+          //     borderTopLeftRadius: 20,
+          //     borderTopRightRadius: 20
+          //   }}>
+          //     <Left style={{paddingLeft:10, flexDirection: 'row', alignItems: 'center',}}>
+          //       <RepeatMode size={20} color={'grey'} textOn textStyle={{fontSize:18, color:'black'}}/>
+          //       <Text style={{fontSize:18}}>({control.playList.length})</Text>
+          //     </Left>
+          //     <Body/>
+          //     <Right style={{flexDirection: 'row', alignItems: 'center', paddingRight: 15}}>
+          //       <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 10}}>
+          //         {/*<IconMateriallcons name="playlist-add" size={20} color={'grey'}/>*/}
+          //         <IconFontAwesome name="plus-square-o" size={20} color={'grey'}/>
+          //         <Text style={{fontSize:18, marginLeft: 5,}}>收藏全部</Text>
+          //       </View>
+          //       <View style={{borderLeftWidth: 1, borderColor: 'grey', paddingLeft: 10}}>
+          //         {/*<IconMateriallcons name="delete" size={20} color={'grey'}/>*/}
+          //         <IconFontAwesome name="trash-o" size={20} color={'grey'}/>
+          //       </View>
+          //     </Right>
+          //   </View>
+          // }
+        />
         </View>
-        {songListVisible &&
-        <View
-          style={{display:'absolute'}}
-        >
-          <Text>yes here</Text>
-          <Left  style={{flex:1}}/>
-          <Body  style={{flex:1}}/>
-          <Right style={{flex:1}}>
-            <Text>just a modal</Text>
-          </Right>
-        </View>
-        }
       </View>
     )
   }
@@ -336,7 +365,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     marginBottom: 10,
-  }
+  },
 });
 
 export default connect( ({player, control}) => ({

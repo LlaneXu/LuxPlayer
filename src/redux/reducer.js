@@ -18,7 +18,7 @@ import { PLAYER, CONTROL } from "./actions";
 const player = (state={}, action) =>  {
   switch (action.type) {
     case PLAYER.SONG_ID:
-      return {...state, id: action.data.id};
+      return {...state, id: action.data};
     case PLAYER.SONG_STATUS:
       return {...state, ...action.data};
     default:
@@ -29,14 +29,17 @@ const player = (state={}, action) =>  {
 const control = (state={}, action) =>  {
   switch (action.type) {
     case CONTROL.MODE:
-      return {...state, mode: action.data.mode};
+      return {...state, mode: action.data};
     case CONTROL.PLAY_LIST:
       console.log(action);
-      return {...state, playList: action.data.playList};
-    case CONTROL.PLAYED_LIST:
-      return {...state, playedList: action.data.playedList};
+      return {
+        ...state,
+        playList: action.data,
+        lastList: state.playList,
+        historyList: state.lastList,
+      };
     case CONTROL.CURRENT_INDEX:
-      return {...state, currentIndex: action.data.currentIndex};
+      return {...state, currentIndex: action.data};
     default:
       return {...state};
   }

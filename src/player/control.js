@@ -22,30 +22,26 @@ import { getRandomIntBetween, switchItems } from '../utils/tools';
 let playerRef=null;
 
 export const updateRef = (ref) => {
-  if (!playerRef) {
     playerRef = ref;
-  }
 };
 
-/*
-0 周深
-1 薛之谦
-2 小情歌
-3 陈奕迅
- */
-const testUrl = [
-  'http://music.163.com/song/media/outer/url?id=1425818683.mp3',
-  'http://biliblue.com/static/music/%E8%96%9B%E4%B9%8B%E8%B0%A6/%E7%BB%85%E5%A3%AB/%E8%96%9B%E4%B9%8B%E8%B0%A6%20-%20%E6%BC%94%E5%91%98.m4a',
-  'http://biliblue.com/static/music/%E8%8B%8F%E6%89%93%E7%BB%BF/%E5%B0%8F%E5%AE%87%E5%AE%99/%E8%8B%8F%E6%89%93%E7%BB%BF%20-%20%E5%B0%8F%E6%83%85%E6%AD%8C.m4a',
-  'http://biliblue.com/static/music/%E5%BC%A0%E5%AE%87/%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6/%E5%BC%A0%E5%AE%87%20-%20%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6.m4a',
-];
-
-const playList = testUrl.map((item,index) => {
-  return {
-    id: index,
-    url: item,
-  }
-});
+const playList = [{
+  id: 1,
+  name: '周深',
+  url: 'http://music.163.com/song/media/outer/url?id=1425818683.mp3',
+},{
+  id: 2,
+  name: '薛之谦',
+  url: 'http://biliblue.com/static/music/%E8%96%9B%E4%B9%8B%E8%B0%A6/%E7%BB%85%E5%A3%AB/%E8%96%9B%E4%B9%8B%E8%B0%A6%20-%20%E6%BC%94%E5%91%98.m4a',
+}, {
+  id: 3,
+  name: '小情歌',
+  url: 'http://biliblue.com/static/music/%E8%8B%8F%E6%89%93%E7%BB%BF/%E5%B0%8F%E5%AE%87%E5%AE%99/%E8%8B%8F%E6%89%93%E7%BB%BF%20-%20%E5%B0%8F%E6%83%85%E6%AD%8C.m4a',
+},{
+  id: 4,
+  name: '陈奕迅',
+  url: 'http://biliblue.com/static/music/%E5%BC%A0%E5%AE%87/%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6/%E5%BC%A0%E5%AE%87%20-%20%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6.m4a',
+}];
 store.dispatch({
   type: CONTROL.PLAY_LIST,
   data: {
@@ -202,21 +198,11 @@ export const playNext = (manual=true) => {
   Toast.show(`id:${nextIndex}`);
   store.dispatch({
     type: CONTROL.CURRENT_INDEX,
-    data: {
-      currentIndex: nextIndex,
-    }
+    data:  nextIndex,
   });
   store.dispatch({
     type: CONTROL.PLAY_LIST,
-    data: {
-      playList,
-    }
-  });
-  store.dispatch({
-    type: CONTROL.PLAYED_LIST,
-    data: {
-      playedList,
-    }
+    data: playList,
   });
   console.log(nextIndex, nextSong)
   if (nextSong) {
@@ -249,9 +235,7 @@ export const playPrev = () => {
 
   store.dispatch({
     type: CONTROL.CURRENT_INDEX,
-    data: {
-      currentIndex: nextIndex,
-    }
+    data: nextIndex,
   });
   // store.dispatch({
   //   type: CONTROL.PLAY_LIST,
@@ -259,12 +243,6 @@ export const playPrev = () => {
   //     playList,
   //   }
   // });
-  store.dispatch({
-    type: CONTROL.PLAYED_LIST,
-    data: {
-      playedList,
-    }
-  });
 
   if (nextSong) {
     let url = nextSong.url;
@@ -289,8 +267,6 @@ export const changeMode = () => {
   });
   store.dispatch({
     type: CONTROL.MODE,
-    data: {
-      mode: options[index]
-    }
+    data: options[index]
   });
 };

@@ -21,6 +21,5 @@ export const PLAYER = {
 export const CONTROL = {
   MODE: 'MODE',
   PLAY_LIST: 'PLAY_LIST',
-  PLAYED_LIST: 'PLAYED_LIST',
   CURRENT_INDEX: 'CURRENT_INDEX',
 };
