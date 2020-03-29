@@ -13,41 +13,227 @@
 
  ***/
 import React, { Component } from 'react';
-import {FlatList, Text, View} from 'react-native';
+import {FlatList, Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {
+  H3,
+  Card,
+  CardItem,
   Body,
   Button, Left, Right,
 } from "native-base";
-import Carousel from 'react-native-snap-carousel';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
 import { connect } from 'react-redux';
 import RepeatMode from "./RepeatMode";
 import IconFontAwesome from "react-native-vector-icons/FontAwesome";
+import Icon from 'react-native-vector-icons/Ionicons';
 import BottomSheet from "reanimated-bottom-sheet";
+import screen from '../utils/screen';
+
+const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    backgroundColor: 'white'
+  },
+  margin: {
+    margin: 10,
+  },
+  headerContainer: {
+    padding: 10,
+    backgroundColor: "white",
+    borderColor: 'grey',
+    borderBottomWidth: 1,
+    // borderWidth: 1,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20
+  },
+  headerTitle: {
+    marginTop: 10,
+    marginLeft: 10,
+    // height: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerContent: {
+    // marginTop: 20,
+    // marginLeft: 10,
+    // // height: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  headerLeft: {
+    paddingLeft:10,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  headerRight: {
+    paddingRight: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  headerDelete: {
+    borderLeftWidth: 1,
+    borderColor: 'grey',
+    paddingLeft: 10
+  },
+  text: {
+    marginLeft: 5,
+    marginRight: 5,
+    fontSize: 18,
+    color: 'black',
+  },
+  textFade: {
+    marginLeft: 5,
+    marginRight: 5,
+    fontSize: 15,
+    color: 'grey',
+  },
+  icon: {},
+});
 
 class PlayList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      slider1ActiveSlide: 2,
     }
   }
+  renderItemHeader = (item,index) => {
+    const {control} = this.props;
+    const {name, data} = item;
+    const titleMap = ['历史播放','上次播放','当前播放'];
+    console.log(item)
+    return (
+      <View style={styles.headerContainer}>
+        <View style={styles.headerTitle}>
+        <H3>{titleMap[index]}</H3>
+          <Text style={styles.textFade}>({data.length})</Text>
+        </View>
+        {index !==2 ? (
+          <Text style={[styles.margin,styles.textFade]}>{name}</Text>
+        ) : (
+          <View style={styles.headerContent}>
+            <View style={styles.headerLeft}>
+              <RepeatMode size={20} color={'grey'} textOn textStyle={styles.text}/>
+            </View>
+            <View/>
+            <View style={styles.headerRight}>
+              <View style={styles.headerRight}>
+                <IconFontAwesome name="plus-square-o" size={20} color={'grey'}/>
+                <Text style={styles.text}>收藏全部</Text>
+              </View>
+              <View style={styles.headerDelete}>
+                <IconFontAwesome name="trash-o" size={20} color={'grey'}/>
+              </View>
+            </View>
+          </View>
+        )}
+      </View>
+    );
+  };
+  renderLine = (data, index, selected) => {
+    if(data) {
+      console.log(data)
+      return (
+        <View style={{flex:1, margin: 5, flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{flex: 0.8, flexDirection: 'row', alignItems: 'center'}}>
+            <Text numberOfLines={1}>
+              <Text style={styles.textFade}>{index+1}.</Text>
+              <Text style={styles.text}>{data.name}</Text>
+              <Text style={styles.textFade}>-{data.artist.name}</Text>
+            </Text>
+          </View>
+          <View style={{marginRight: 10}}>
+            <Button transparent>
+              <Icon name={'md-close'} size={25} color={'grey'}/>
+            </Button>
+          </View>
+        </View>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  renderItem = ({item, index}) => {
+    return (
+      <View style={{height: '100%'}}>
+        {this.renderItemHeader(item,index)}
+        <FlatList
+          style={{backgroundColor:'white',paddingLeft: 10}}
+          data={item.data}
+          keyExtractor={(item, index) => {
+            return item.id.toString();
+          }}
+          // initialScrollIndex={7}
+          // ItemSeparatorComponent={() => <View
+          //   style={{height: 1, width: '96%', backgroundColor: '#CED0CE', marginLeft: '2%'}}/>}
+          renderItem={({item, index, separators}) => this.renderLine(item, index)}
+        />
+      </View>
+    )
+  };
 
   render() {
     const { control } = this.props;
+    const {slider1ActiveSlide} = this.state;
+    const listData = [
+      control.historyList,
+      control.lastList,
+      control.playList,
+    ];
     return (
-      <Text>something</Text>
-      // <Carousel
-      //   data={[
-      // control.historyList,
-      // control.lastList,
-      // control.playList
-      //   ]}
-      //   renderItem={({item, index}) => {
-      //     console.log(item);
-      //     return (
-      //       <Text>something</Text>
-      //     );
-      //   }}
-      // />
+      <View>
+        {/*{this.renderItem({item:control.playList,index:2})}*/}
+        <Pagination
+          dotsLength={3}
+          activeDotIndex={slider1ActiveSlide}
+          containerStyle={{
+            paddingVertical: 8
+          }}
+          dotColor={'rgba(255, 255, 255, 0.92)'}
+          dotStyle={{
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            marginHorizontal: 8
+          }}
+          inactiveDotColor={'#1a1917'}
+          inactiveDotOpacity={0.4}
+          inactiveDotScale={0.6}
+          // carouselRef={this._slider1Ref}
+          // tappableDots={!!this._slider1Ref}
+        />
+      <Carousel
+        layout={'default'}
+        data={listData}
+        sliderWidth={screen.width}
+        itemWidth={screen.width-40}
+        // hasParallaxImages={true}
+        firstItem={2}
+        inactiveSlideScale={0.95}
+        inactiveSlideOpacity={0.7}
+        // slideStyle={{margin: 10}}
+        // autoplay={true}
+        // autoplayDelay={500}
+        // autoplayInterval={3000}
+        // loop={true}
+        // enableSnap={true}
+        containerCustomStyle={{
+          // marginLeft:10,
+          marginTop: 15,
+          overflow: 'visible' // for custom animations
+        }}
+        // contentContainerCustomStyle={{
+        //   paddingLeft: 10,
+        // //   paddingVertical: 10 // for custom animation
+        // }}
+        onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
+        renderItem={this.renderItem}
+      />
+      </View>
     );
   }
 }

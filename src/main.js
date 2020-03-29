@@ -30,6 +30,7 @@ import PlayerView from './player/PlayerView';
 import { store } from './redux/stores';
 import Player from "./player/Player";
 import { screen } from './utils';
+import PlayList from "./widget/PlayList";
 
 
 // import { createStore } from 'redux';

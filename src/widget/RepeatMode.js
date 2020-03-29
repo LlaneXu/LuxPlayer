@@ -13,10 +13,11 @@
 
  ***/
 import React, { Component } from 'react';
-import {Text, View} from 'react-native';
 import {
-  Button,
-} from "native-base";
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import { connect } from 'react-redux';
 import IconMateriallcons from 'react-native-vector-icons/MaterialIcons';
 import {changeMode} from "../player/control";
@@ -32,15 +33,17 @@ class RepeatMode extends Component {
   render() {
     const { control, size=30, color='grey', textOn=false, textStyle={marginLeft: 2, fontSize:20, color:'black'}} = this.props;
     return (
-      <View style={{flexDirection: 'row',
-        alignItems: 'center',}}>
-        <Button transparent onPress={changeMode}>
-          {control.mode === 'cycle' && <IconMateriallcons name="repeat" size={size} color={color}/>}
-          {control.mode === 'random' && <IconMateriallcons name="shuffle" size={size} color={color}/>}
-          {control.mode === 'cycleOne' && <IconMateriallcons name="repeat-one" size={size} color={color}/>}
-        </Button>
-        {textOn && <Text style={textStyle}>{modeOptions[control.mode]}</Text>}
-      </View>
+      <TouchableOpacity onPress={changeMode}>
+        <View style={{flexDirection: 'row',
+          alignItems: 'center',}}>
+          {/*<Button transparent onPress={changeMode}>*/}
+            {control.mode === 'cycle' && <IconMateriallcons name="repeat" size={size} color={color}/>}
+            {control.mode === 'random' && <IconMateriallcons name="shuffle" size={size} color={color}/>}
+            {control.mode === 'cycleOne' && <IconMateriallcons name="repeat-one" size={size} color={color}/>}
+          {/*</Button>*/}
+          {textOn && <Text style={textStyle}>{modeOptions[control.mode]}</Text>}
+        </View>
+      </TouchableOpacity>
     )
   }
 }
