@@ -184,7 +184,7 @@ class PlayerView extends PureComponent {
   };
   popUp = React.createRef();
   render(): React.ReactNode {
-    const { player, control } = this.props;
+    const { player, control, navigation } = this.props;
     const { sliderProgress, songListVisible } = this.state;
     return (
       <View style={styles.container}>
@@ -195,7 +195,7 @@ class PlayerView extends PureComponent {
         <View style={{zIndex: 5, flex: 1}}>
           <Header transparent>
             <Left style={{flex:1}}>
-              <Button transparent>
+              <Button transparent onPress={() => {console.log('goback');return navigation.goBack();}}>
                 <Icon name={'ios-arrow-back'} size={25} color={'white'}/>
               </Button>
             </Left>
@@ -277,7 +277,7 @@ class PlayerView extends PureComponent {
           <BottomSheet
             ref={this.popUp}
             snapPoints={[screen.height, 0]}
-            initialSnap={0}
+            initialSnap={1}
             enabledContentGestureInteraction={false}
             enabledInnerScrolling={true}
             renderContent={() =>

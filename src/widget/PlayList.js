@@ -135,7 +135,6 @@ class PlayList extends Component {
   };
   renderLine = (data, index, selected) => {
     if(data) {
-      console.log(data)
       return (
         <View style={{flex:1, margin: 5, flexDirection: 'row', justifyContent: 'space-between'}}>
           <View style={{flex: 0.8, flexDirection: 'row', alignItems: 'center'}}>

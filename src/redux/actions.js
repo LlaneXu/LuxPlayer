@@ -23,3 +23,8 @@ export const CONTROL = {
   PLAY_LIST: 'PLAY_LIST',
   CURRENT_INDEX: 'CURRENT_INDEX',
 };
+
+
+export const PLAYLIST = {
+  LOADING: 'LOADING',
+};

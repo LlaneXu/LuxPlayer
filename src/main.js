@@ -24,7 +24,9 @@ import { Provider } from 'react-redux';
 // import { Provider as ProvideAnt } from '@ant-design/react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
+import Home from './Home';
 import PlayerView from './player/PlayerView';
 
 import { store } from './redux/stores';
@@ -52,6 +54,17 @@ const styles = StyleSheet.create({
   }
 });
 
+const Drawer = createDrawerNavigator();
+
+function LeftDrawer() {
+  return (
+  <Drawer.Navigator>
+    <Drawer.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
+    <Drawer.Screen name={'Setting'} component={() => <Text>Setting screen</Text>} />
+    <Drawer.Screen name={'Setting2'} component={() => <Text>Setting2 screen</Text>} />
+  </Drawer.Navigator>
+  );
+}
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -62,13 +75,13 @@ function Navigator() {
       showIcon={true}
       headerMode={'screen'}
     >
+      <Stack.Screen name={'Drawer'} component={LeftDrawer} options={{headerShown: false}}/>
       {/*<Stack.Screen*/}
-        {/*name={'Tab'}*/}
-        {/*component={BottomTab}*/}
-        {/*options={headerTest}*/}
+        {/*name={'Home'}*/}
+        {/*component={Home}*/}
+        {/*options={{headerShown: false}}*/}
       {/*/>*/}
       <Stack.Screen name={'PlayerView'} component={PlayerView} options={{headerShown: false}}/>
-      {/*<Stack.Screen name={'Player'} component={PlayerScene} options={{headerShown: false}}/>*/}
       {/*<Stack.Screen name={'MvDetail'} component={MvDetail} />*/}
       {/*<Stack.Screen name={'UserDetail'} component={UserDetail} />*/}
       {/*<Stack.Screen name={'DjDetail'} component={DjDetail} />*/}

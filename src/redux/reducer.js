@@ -13,7 +13,7 @@
 
  ***/
 import { combineReducers } from 'redux';
-import { PLAYER, CONTROL } from "./actions";
+import { PLAYER, CONTROL, PLAYLIST } from "./actions";
 
 const player = (state={}, action) =>  {
   switch (action.type) {
@@ -45,7 +45,17 @@ const control = (state={}, action) =>  {
   }
 };
 
+const playlist = (state={}, action) =>  {
+  switch (action.type) {
+    case PLAYLIST.LOADING:
+      return {...state, loading: action.data};
+    default:
+      return {...state};
+  }
+};
+
 export default combineReducers({
   player,
   control,
+  playlist,
 })
