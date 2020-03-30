@@ -20,3 +20,11 @@ const base = `${host}/api/v1`;
 export function personalized(platform='netease') {
   return http.get(`${base}/personalized/${platform}/`);
 }
+
+export function playlist(platform='netease', id) {
+  return http.get(`${base}/playlist/${platform}/?id=${id}`);
+}
+
+export function album(platform='netease', id) {
+  return http.get(`${base}/album/${platform}/?id=${id}`);
+}

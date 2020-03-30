@@ -35,7 +35,7 @@ export default function PublicHeader(props) {
           <Icon name={'ios-arrow-back'} size={25} color={'grey'}/>
         </Button>
       </Left>
-      <Body style={{alignItems: 'center'}}>
+      <Body transparent style={{alignItems: 'center'}}>
       <H3>{title}</H3>
       </Body>
       <Right style={{flex: 1}}>
