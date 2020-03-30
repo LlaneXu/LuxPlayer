@@ -29,6 +29,7 @@ import screen from './utils/screen';
 import PlayerMini from './player/PlayerMini';
 import Carousel from "react-native-snap-carousel";
 import {personalized} from './api';
+import DiscoverView from "./discover/DiscoverView";
 
 
 const styles = StyleSheet.create({
@@ -51,16 +52,13 @@ export default class Home extends Component {
     }
   }
   componentDidMount(): void {
-    console.log('send request')
-    personalized().then((data) => {
-      console.log(data);
-    })
   }
 
   renderItem = ({item, index}) => {
     return (
       <View style={{width: '100%', height: '100%', backgroundColor:'grey'}}>
-      <Text>{item}-{index}</Text>
+        {index === 0 && <Text>{item}-{index}</Text>}
+        {index === 1 && <DiscoverView/>}
       </View>
     );
   };

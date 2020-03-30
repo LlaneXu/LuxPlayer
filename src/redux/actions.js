@@ -24,7 +24,9 @@ export const CONTROL = {
   CURRENT_INDEX: 'CURRENT_INDEX',
 };
 
-
-export const PLAYLIST = {
+export const API = {
   LOADING: 'LOADING',
+  UPDATE_LIST: 'UPDATE_LIST',
+  UPDATE_OBJECT: 'UPDATE_OBJECT',
+  NEW: 'NEW',
 };

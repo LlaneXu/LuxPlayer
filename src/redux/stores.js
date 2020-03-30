@@ -45,8 +45,9 @@ export let store = createStore(reducer, {
     playIndex: [],
     currentIndex: 0,
   },
-  playlist: {
+  personalized: {
     loading: false,
+    data: [],
   }
 });
 
