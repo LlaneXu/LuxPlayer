@@ -28,17 +28,11 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import Home from './Home';
 import PlayerView from './player/PlayerView';
+import Search from './search/Search';
 
 import { store } from './redux/stores';
 import Player from "./player/Player";
 import { screen } from './utils';
-import PlayList from "./widget/PlayList";
-
-
-// import { createStore } from 'redux';
-// import reducer from './redux/reducer';
-
-// const store = createStore(reducer);
 
 
 const styles = StyleSheet.create({
@@ -76,15 +70,8 @@ function Navigator() {
       headerMode={'screen'}
     >
       <Stack.Screen name={'Drawer'} component={LeftDrawer} options={{headerShown: false}}/>
-      {/*<Stack.Screen*/}
-        {/*name={'Home'}*/}
-        {/*component={Home}*/}
-        {/*options={{headerShown: false}}*/}
-      {/*/>*/}
       <Stack.Screen name={'PlayerView'} component={PlayerView} options={{headerShown: false}}/>
-      {/*<Stack.Screen name={'MvDetail'} component={MvDetail} />*/}
-      {/*<Stack.Screen name={'UserDetail'} component={UserDetail} />*/}
-      {/*<Stack.Screen name={'DjDetail'} component={DjDetail} />*/}
+      <Stack.Screen name={'Search'} component={Search} options={{headerShown: false}}/>
     </Stack.Navigator>
   );
 }

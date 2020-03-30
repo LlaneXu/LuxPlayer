@@ -1,9 +1,9 @@
 /***
 
- @Time    : 2020-03-29 20:25
+ @Time    : 2020-03-30 11:10
  @Author  : Lei Xu
  @Email   : Llane_xu@outlook.com
- @File    : DiscoverView.py
+ @File    : Album.py
 
  Description:
 
@@ -12,13 +12,12 @@
  Todo:
 
  ***/
-
 import React, { PureComponent } from 'react';
 import {FlatList, Text, View, Image,ImageBackground, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   Body,
   Button,
-  Header, Left, Right, Title,
+  Left, Right, Title,
   Container,
   Content,
   Footer,
@@ -28,18 +27,22 @@ import {
 } from 'native-base';
 
 import AlbumCover from '../widget/AlbumCover';
+import PublicHeader from '../widget/PublicHeader';
 
 
 import {personalized} from "../api";
 import screen from '../utils/screen';
+import Icon from "react-native-vector-icons/Ionicons";
 
-class DiscoverView extends PureComponent {
+class Album extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
+      meta: {},
     }
   }
+
   componentDidMount(): void {
     /*
     {
@@ -56,16 +59,20 @@ class DiscoverView extends PureComponent {
       "alg": "featured"
     },
      */
-    personalized('netease').then((data) => {
-      data.forEach((item) => {item.platform = 'netease'});
-      this.setState({data});
-    })
+    // personalized('netease').then((data) => {
+    //   data.forEach((item) => {item.platform = 'netease'});
+    //   this.setState({data});
+    // })
   }
 
   render(): React.ReactNode {
     const {data} = this.state;
-    console.log(data);
+    const {navigation, route: {params: {meta, isPlayList}} } = this.props;
+    console.log(this.props);
     return (
+      <Container>
+        <PublicHeader title={isPlayList?'歌单':'专辑'}/>
+      <Content>
       <View
         style={{
           flex:1,
@@ -73,18 +80,21 @@ class DiscoverView extends PureComponent {
           flexWrap: 'wrap',
           justifyContent: 'space-around',
         }}>
-        {data.map((item) => {
-          return (
-            <View key={item.id} style={{margin: 5, width: 120, alignItems:'center'}}>
-              <AlbumCover data={item} size={120}/>
-              <Text numberOfLines={2} style={{fontsize:15}}>{item.name}</Text>
-            </View>
-          );
-        })}
+        <AlbumCover data={meta} size={120}/>
+        {/*{data.map((item) => {*/}
+          {/*return (*/}
+            {/*<View key={item.id} style={{margin: 5, width: 120, alignItems:'center'}}>*/}
+              {/**/}
+              {/*<Text numberOfLines={2} style={{fontsize:15}}>{item.name}</Text>*/}
+            {/*</View>*/}
+          {/*);*/}
+        {/*})}*/}
 
       </View>
+      </Content>
+      </Container>
     );
   }
 }
 
-export default DiscoverView;
+export default Album;
