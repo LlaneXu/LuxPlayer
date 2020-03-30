@@ -40,12 +40,29 @@ import IconFontisto from 'react-native-vector-icons/Fontisto';
 import IconEvilIcons from 'react-native-vector-icons/EvilIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 
+
+
+const styles = StyleSheet.create({
+  text: {
+    marginLeft: 5,
+    marginRight: 5,
+    fontSize: 18,
+    color: 'black',
+  },
+  textFade: {
+    marginLeft: 5,
+    marginRight: 5,
+    fontSize: 15,
+    color: 'grey',
+  },
+});
+
 class Album extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
-      id,
+      id: null,
       isPlayList: false,
       data: {},
     }
@@ -93,6 +110,7 @@ class Album extends PureComponent {
     //   this.setState({data});
     // })
     const {route: {params: {id, isPlayList}} } = this.props;
+    console.log(this.props);
     this.setState({id,isPlayList});
     if (isPlayList) {
       playlist("netease", id).then((data) => {
@@ -101,6 +119,25 @@ class Album extends PureComponent {
       })
     }
   }
+  renderItem = ({item, index, separators}) => {
+    const artist = item.ar.map((one) => one.name).join('&');
+    return (
+      <View style={{flex:1, margin: 5, flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{flex: 0.8, flexDirection: 'row', alignItems: 'center'}}>
+          <Text style={styles.textFade}>{index+1}.</Text>
+          <View>
+            <Text numberOfLines={1} style={styles.text}>{item.name}</Text>
+            <Text numberOfLines={1} style={styles.textFade}>{artist}-{item.al.name}</Text>
+          </View>
+        </View>
+        <View style={{marginRight: 10}}>
+          <Button transparent>
+            <Icon name={'md-more'} size={25} color={'grey'}/>
+          </Button>
+        </View>
+      </View>
+    );
+  };
 
   render(): React.ReactNode {
     const {id, loading, isPlayList, data} = this.state;
@@ -108,14 +145,14 @@ class Album extends PureComponent {
     const {navigation} = this.props;
     return (
       <Container>
+        <Image
+          style={{width: screen.width, height: screen.height, position: 'absolute', zIndex: 0, opacity: 0.6}}
+          blurRadius={8} source={{uri: data.picUrl}}
+        />
         <PublicHeader title={isPlayList ? '歌单' : '专辑'}/>
         <Loading loading={loading}>
           <Content>
             <View>
-              <Image
-                style={{width: screen.width, height: screen.height, position: 'absolute', zIndex: 1, opacity: 0.6}}
-                blurRadius={8} source={{uri: data.picUrl}}
-              />
               <View
                 style={{
                   flex: 1,
@@ -127,7 +164,7 @@ class Album extends PureComponent {
                 <View style={{flex: 1, margin: 20}}>
                   <H3>{data.name}</H3>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text numberOfLines={3} style={{marginTop: 20}}>{data.description}</Text>
+                    <Text numberOfLines={2} style={{marginTop: 20}}>{data.description}</Text>
                     <Icon style={{marginLeft: 10}} name={'ios-arrow-forward'}/>
                   </View>
                 </View>
@@ -150,6 +187,12 @@ class Album extends PureComponent {
                   <Text>多选</Text>
                 </View>
               </View>
+            </View>
+            <View style={{margin:10, backgroundColor:'white', borderTopLeftRadius: 20, borderTopRightRadius: 20}}>
+              <FlatList
+                data={tracks}
+                renderItem={this.renderItem}
+              />
             </View>
           </Content>
         </Loading>
