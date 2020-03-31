@@ -76,7 +76,7 @@ class DiscoverView extends PureComponent {
         {data.map((item) => {
           return (
             <View key={item.id} style={{margin: 5, width: 120, alignItems:'center'}}>
-              <TouchableOpacity onPress={() => {console.log(item);navigation.navigate('Album', {id: item.id, isPlayList: true})}}>
+              <TouchableOpacity onPress={() => {console.log(item);navigation.navigate('DetailView', {id: item.id, isPlayList: true})}}>
                 <AlbumCover data={item} size={120}/>
                 <Text numberOfLines={2} style={{fontSize:15}}>{item.name}</Text>
               </TouchableOpacity>

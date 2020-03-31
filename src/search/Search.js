@@ -3,7 +3,7 @@
  @Time    : 2020-03-30 11:54
  @Author  : Lei Xu
  @Email   : Llane_xu@outlook.com
- @File    : Search.py
+ @File    : Example.py
 
  Description:
 
@@ -13,8 +13,18 @@
 
  ***/
 
-import React, { PureComponent } from 'react';
-import {FlatList, Text, View, Image,ImageBackground, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {PureComponent} from 'react';
+import {
+  FlatList,
+  Text,
+  View,
+  StatusBar,
+  Image,
+  ImageBackground,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native';
 import {
   Body,
   Button,
@@ -26,13 +36,14 @@ import {
   Card,
   CardItem,
 } from 'native-base';
+import Icon from 'react-native-vector-icons/Ionicons'
+
 
 
 export default class Search extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-    }
+    this.state = {}
   }
 
   componentDidMount(): void {
@@ -40,14 +51,13 @@ export default class Search extends PureComponent {
 
   render(): React.ReactNode {
     return (
-      <Container>
-        <Header transparent>
-          <Text>header here</Text>
-        </Header>
-        <Content>
-          <Text>search page</Text>
-        </Content>
-      </Container>
+      <View>
+      <Text>search page</Text>
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+
+})

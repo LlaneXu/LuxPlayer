@@ -3,7 +3,7 @@
  @Time    : 2020-03-30 11:10
  @Author  : Lei Xu
  @Email   : Llane_xu@outlook.com
- @File    : Album.py
+ @File    : DetailView.py
 
  Description:
 
@@ -13,7 +13,11 @@
 
  ***/
 import React, { PureComponent } from 'react';
-import {FlatList, Text, View, Image,ImageBackground, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Dimensions,
+  ListView,
+  FlatList, Text, View, Image, ImageBackground, StyleSheet, TouchableOpacity, SafeAreaView
+} from 'react-native';
 import {
   Body,
   Button,
@@ -32,6 +36,8 @@ import AlbumCover from '../widget/AlbumCover';
 import PublicHeader from '../widget/PublicHeader';
 import Loading from '../widget/Loading';
 
+import AlbumDescription from './AlbumDescription';
+import SongList from './SongList';
 
 import {album,playlist} from "../api";
 import screen from '../utils/screen';
@@ -57,7 +63,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Album extends PureComponent {
+class DetailView extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -141,64 +147,24 @@ class Album extends PureComponent {
 
   render(): React.ReactNode {
     const {id, loading, isPlayList, data} = this.state;
-    const { tracks } = data;
+    const { tracks=[] } = data;
     const {navigation} = this.props;
     return (
       <Container>
-        <Image
-          style={{width: screen.width, height: screen.height, position: 'absolute', zIndex: 0, opacity: 0.6}}
-          blurRadius={8} source={{uri: data.picUrl}}
-        />
-        <PublicHeader title={isPlayList ? '歌单' : '专辑'}/>
         <Loading loading={loading}>
-          <Content>
-            <View>
-              <View
-                style={{
-                  flex: 1,
-                  zIndex: 5,
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                }}>
-                <AlbumCover data={data} size={150}/>
-                <View style={{flex: 1, margin: 20}}>
-                  <H3>{data.name}</H3>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text numberOfLines={2} style={{marginTop: 20}}>{data.description}</Text>
-                    <Icon style={{marginLeft: 10}} name={'ios-arrow-forward'}/>
-                  </View>
-                </View>
-              </View>
-              <View style={{flexDirection: 'row', alignItems:'center', justifyContent: 'space-around'}}>
-                <View style={{alignItems: 'center'}}>
-                  <IconFeather size={25} name={'message-circle'}/>
-                  <Text>{data.commentCount}</Text>
-                </View>
-                <View style={{alignItems: 'center'}}>
-                  <IconFeather size={25} name={'share'}/>
-                  <Text>{data.shareCount}</Text>
-                </View>
-                <View style={{alignItems: 'center'}}>
-                  <IconFeather size={25} name={'download'}/>
-                  <Text>下载</Text>
-                </View>
-                <View style={{alignItems: 'center'}}>
-                  <IconFeather size={25} name={'check-circle'}/>
-                  <Text>多选</Text>
-                </View>
-              </View>
-            </View>
-            <View style={{margin:10, backgroundColor:'white', borderTopLeftRadius: 20, borderTopRightRadius: 20}}>
-              <FlatList
-                data={tracks}
-                renderItem={this.renderItem}
-              />
-            </View>
-          </Content>
+          <Image
+            style={{width: screen.width, height: screen.height, position: 'absolute', zIndex: 0, opacity: 0.6}}
+            blurRadius={8} source={{uri: data.picUrl}}
+          />
+          <PublicHeader title={isPlayList ? '歌单' : '专辑'}/>
+          <View style={{flex:5}}>
+          <AlbumDescription style={{flex:2}} data={data}/>
+          <SongList style={{flex:3}} data={tracks}/>
+          </View>
         </Loading>
       </Container>
     );
   }
 }
 
-export default Album;
+export default DetailView;

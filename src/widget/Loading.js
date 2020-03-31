@@ -22,7 +22,7 @@ import {
 export default function Loading(props){
   const {loading} = props;
   if (loading) {
-    return <Spinner />
+    return <Spinner style={{marginTop: 200}}/>
   } else {
     return props.children;
   }

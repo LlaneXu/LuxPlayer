@@ -54,8 +54,8 @@ function LeftDrawer() {
   return (
   <Drawer.Navigator>
     <Drawer.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
-    <Drawer.Screen name={'Setting'} component={() => <Text>Setting screen</Text>} />
-    <Drawer.Screen name={'Setting2'} component={() => <Text>Setting2 screen</Text>} />
+    {/*<Drawer.Screen name={'Setting'} component={() => <Text>Setting screen</Text>} />*/}
+    {/*<Drawer.Screen name={'Setting2'} component={() => <Text>Setting2 screen</Text>} />*/}
   </Drawer.Navigator>
   );
 }
@@ -71,7 +71,7 @@ function Navigator() {
     >
       <Stack.Screen name={'Drawer'} component={LeftDrawer} options={{headerShown: false}}/>
       <Stack.Screen name={'PlayerView'} component={PlayerView} options={{headerShown: false}}/>
-      <Stack.Screen name={'Search'} component={Search} options={{headerShown: false}}/>
+      <Stack.Screen name={'Search'} component={Search}/>
     </Stack.Navigator>
   );
 }

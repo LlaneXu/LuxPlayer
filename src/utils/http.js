@@ -59,6 +59,10 @@ export default class http {
     const _response = http.checkStatus(response);
     const json = await _response.json();
     if (json.code !== 0 ){
+      Toast.show(`code错误(${json.code}): ${json.message}`, {
+        duration: 100,
+        position: -120,
+      });
       throw new Error(`code error(${json.code}): ${json.message}`);
     }
     return json.data;
@@ -76,6 +80,10 @@ export default class http {
       response = await http.processResult(response);//这里是对结果进行处理。包括判断响应状态和根据response的类型解析结果
       return response;
     } catch(error) {
+      Toast.show(`请求失败: ${error.toString()}`, {
+        duration: 100,
+        position: -120,
+      });
       throw error;
     }
   }

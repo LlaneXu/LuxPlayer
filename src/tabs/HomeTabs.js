@@ -32,6 +32,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import screen from '../utils/screen';
 import Carousel from "react-native-snap-carousel";
 import DiscoverView from "./discover/DiscoverView";
+import Mine from './mine/Mine';
 
 
 const styles = StyleSheet.create({
@@ -60,7 +61,7 @@ export default class HomeTabs extends Component {
     const {navigation} = this.props;
     return (
       <View style={{width: '100%', height: '100%', backgroundColor:'white'}}>
-        {index === 0 && <Text>{item}-{index}</Text>}
+        {index === 0 && <Mine/>}
         {index === 1 && <DiscoverView navigation={navigation}/>}
       </View>
     );
@@ -87,7 +88,7 @@ export default class HomeTabs extends Component {
           })}
           </Body>
           <Right style={{flex: 1}}>
-            <Button transparent>
+            <Button transparent onPress={() => navigation.navigate('Search')}>
               <Icon name={'ios-search'} size={25} color={'grey'}/>
             </Button>
           </Right>

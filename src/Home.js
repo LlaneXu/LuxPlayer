@@ -22,7 +22,7 @@ import HomeTabs from './tabs/HomeTabs';
 import {createStackNavigator} from "@react-navigation/stack";
 
 
-import Album from "./album/Album";
+import DetailView from "./detail/DetailView";
 
 
 const Stack = createStackNavigator();
@@ -31,7 +31,7 @@ function Navigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name={'HomeTabs'} component={HomeTabs} options={{headerShown: false}}/>
-      <Stack.Screen name={'Album'} component={Album} options={{headerShown: false}}/>
+      <Stack.Screen name={'DetailView'} component={DetailView} options={{headerShown: false}}/>
     </Stack.Navigator>
   );
 }

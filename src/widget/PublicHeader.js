@@ -39,7 +39,7 @@ export default function PublicHeader(props) {
       <H3>{title}</H3>
       </Body>
       <Right style={{flex: 1}}>
-        <Button transparent onPress={()=> navigation.navigate('Search')}>
+        <Button transparent onPress={()=> navigation.navigate('Example')}>
           <Icon name={'ios-search'} size={25} color={'grey'}/>
         </Button>
       </Right>

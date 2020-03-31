@@ -17,7 +17,7 @@ import React, { Component } from 'react';
 import {
   ViewStyle,
 } from 'react-native'
-import SvgUri from 'react-native-svg-uri';
+import SvgUri from '../widget/react-native-svg-uri';
 import svgs from '../static/svgs';
 
 

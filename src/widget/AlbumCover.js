@@ -38,15 +38,17 @@ export default class AlbumCover extends Component {
     const { data, size=150 } = this.props;
     let playCount = data.playCount;
     let unit = '';
-    if (playCount>10000) {
-      playCount /= 10000;
-      unit = '万';
+    if (playCount) {
+      if (playCount > 10000) {
+        playCount /= 10000;
+        unit = '万';
+      }
+      if (playCount > 10000) {
+        playCount /= 10000;
+        unit = '亿';
+      }
+      playCount = playCount.toFixed(0) + unit;
     }
-    if (playCount>10000) {
-      playCount /= 10000;
-      unit = '亿';
-    }
-    playCount = playCount.toFixed(0) + unit;
     return (
       <View style={{margin: 10, width: size, height: size}}>
         <ImageBackground
