@@ -28,114 +28,30 @@ export const updateRef = (ref) => {
 const playList = [{
   id: 1,
   name: '无问东西',
-  artist: {
+  artist: [{
     name: '周深',
-  },
+  }],
   url: 'http://music.163.com/song/media/outer/url?id=1425818683.mp3',
 },{
   id: 2,
   name: '丑八怪超级长的名字到底会怎么样对不对级你偶就八角粉',
-  artist: {
+  artist: [{
     name: '薛之谦',
-  },
+  }],
   url: 'http://biliblue.com/static/music/%E8%96%9B%E4%B9%8B%E8%B0%A6/%E7%BB%85%E5%A3%AB/%E8%96%9B%E4%B9%8B%E8%B0%A6%20-%20%E6%BC%94%E5%91%98.m4a',
 }, {
   id: 3,
   name: '小情歌',
-  artist: {
+  artist: [{
     name: '苏打绿',
-  },
+  }],
   url: 'http://biliblue.com/static/music/%E8%8B%8F%E6%89%93%E7%BB%BF/%E5%B0%8F%E5%AE%87%E5%AE%99/%E8%8B%8F%E6%89%93%E7%BB%BF%20-%20%E5%B0%8F%E6%83%85%E6%AD%8C.m4a',
 },{
   id: 4,
   name: '富士山下',
-  artist: {
+  artist: [{
     name: '陈奕迅',
-  },
-  url: 'http://biliblue.com/static/music/%E5%BC%A0%E5%AE%87/%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6/%E5%BC%A0%E5%AE%87%20-%20%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6.m4a',
-},{
-  id: 5,
-  name: '无问东西2',
-  artist: {
-    name: '周深',
-  },
-  url: 'http://music.163.com/song/media/outer/url?id=1425818683.mp3',
-},{
-  id: 6,
-  name: '丑八怪2',
-  artist: {
-    name: '薛之谦',
-  },
-  url: 'http://biliblue.com/static/music/%E8%96%9B%E4%B9%8B%E8%B0%A6/%E7%BB%85%E5%A3%AB/%E8%96%9B%E4%B9%8B%E8%B0%A6%20-%20%E6%BC%94%E5%91%98.m4a',
-}, {
-  id: 7,
-  name: '小情歌2',
-  artist: {
-    name: '苏打绿',
-  },
-  url: 'http://biliblue.com/static/music/%E8%8B%8F%E6%89%93%E7%BB%BF/%E5%B0%8F%E5%AE%87%E5%AE%99/%E8%8B%8F%E6%89%93%E7%BB%BF%20-%20%E5%B0%8F%E6%83%85%E6%AD%8C.m4a',
-},{
-  id: 8,
-  name: '富士山下2',
-  artist: {
-    name: '陈奕迅',
-  },
-  url: 'http://biliblue.com/static/music/%E5%BC%A0%E5%AE%87/%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6/%E5%BC%A0%E5%AE%87%20-%20%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6.m4a',
-},{
-  id: 9,
-  name: '无问东西3',
-  artist: {
-    name: '周深',
-  },
-  url: 'http://music.163.com/song/media/outer/url?id=1425818683.mp3',
-},{
-  id: 10,
-  name: '丑八怪3',
-  artist: {
-    name: '薛之谦',
-  },
-  url: 'http://biliblue.com/static/music/%E8%96%9B%E4%B9%8B%E8%B0%A6/%E7%BB%85%E5%A3%AB/%E8%96%9B%E4%B9%8B%E8%B0%A6%20-%20%E6%BC%94%E5%91%98.m4a',
-}, {
-  id: 11,
-  name: '小情歌3',
-  artist: {
-    name: '苏打绿',
-  },
-  url: 'http://biliblue.com/static/music/%E8%8B%8F%E6%89%93%E7%BB%BF/%E5%B0%8F%E5%AE%87%E5%AE%99/%E8%8B%8F%E6%89%93%E7%BB%BF%20-%20%E5%B0%8F%E6%83%85%E6%AD%8C.m4a',
-},{
-  id: 12,
-  name: '富士山下3',
-  artist: {
-    name: '陈奕迅',
-  },
-  url: 'http://biliblue.com/static/music/%E5%BC%A0%E5%AE%87/%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6/%E5%BC%A0%E5%AE%87%20-%20%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6.m4a',
-},{
-  id: 13,
-  name: '无问东西4',
-  artist: {
-    name: '周深',
-  },
-  url: 'http://music.163.com/song/media/outer/url?id=1425818683.mp3',
-},{
-  id: 14,
-  name: '丑八怪4',
-  artist: {
-    name: '薛之谦',
-  },
-  url: 'http://biliblue.com/static/music/%E8%96%9B%E4%B9%8B%E8%B0%A6/%E7%BB%85%E5%A3%AB/%E8%96%9B%E4%B9%8B%E8%B0%A6%20-%20%E6%BC%94%E5%91%98.m4a',
-}, {
-  id: 15,
-  name: '小情歌4',
-  artist: {
-    name: '苏打绿',
-  },
-  url: 'http://biliblue.com/static/music/%E8%8B%8F%E6%89%93%E7%BB%BF/%E5%B0%8F%E5%AE%87%E5%AE%99/%E8%8B%8F%E6%89%93%E7%BB%BF%20-%20%E5%B0%8F%E6%83%85%E6%AD%8C.m4a',
-},{
-  id: 16,
-  name: '富士山下4',
-  artist: {
-    name: '陈奕迅',
-  },
+  }],
   url: 'http://biliblue.com/static/music/%E5%BC%A0%E5%AE%87/%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6/%E5%BC%A0%E5%AE%87%20-%20%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6.m4a',
 }];
 
@@ -157,28 +73,37 @@ function test() {
   // console.log(playList)
 
   store.dispatch({
-    type: CONTROL.PLAY_LIST,
-    data:
-      {
+    type: CONTROL.NEW_LIST,
+    data: {
+      currentIndex: 0,
+      playListObj: {
+        id: 1,
         name: '历史歌单',
         data: playList,
       },
+    }
   });
   store.dispatch({
-    type: CONTROL.PLAY_LIST,
-    data:
-      {
+    type: CONTROL.NEW_LIST,
+    data: {
+      currentIndex: 0,
+      playListObj: {
+        id: 2,
         name: '上次歌单',
         data: playList,
       },
+    }
   });
   store.dispatch({
-    type: CONTROL.PLAY_LIST,
-    data:
-      {
+    type: CONTROL.NEW_LIST,
+    data: {
+      currentIndex: 0,
+      playListObj: {
+        id: 3,
         name: '自定义歌单',
         data: playList,
       },
+    }
   });
 }
 test();
@@ -206,6 +131,9 @@ export const playOrPause = () => {
   }
 };
 
+export const play = (track) => {
+  // console.log('play track: ', track);
+};
 export const playSong = (url) => {
   console.log(url);
   const updateData = {
@@ -316,12 +244,14 @@ export const playNext = (manual=true) => {
     data:  nextIndex,
   });
   store.dispatch({
-    type: CONTROL.PLAY_LIST,
-    data:
-      {
+    type: CONTROL.NEW_LIST,
+    data: {
+      currentIndex: 0,
+      playListObj: {
         name: '歌单名字',
         data: playList,
       },
+    }
   });
   console.log(nextIndex, nextSong)
   if (nextSong) {

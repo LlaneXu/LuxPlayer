@@ -30,15 +30,18 @@ export let store = createStore(reducer, {
   },
   control: {
     mode: 'cycle', //  random | cycle | cycleOne
-    historyList: {
+    historyListObj: {
+      id: null,
       name: '',
       data: [],
     },
-    lastList: {
+    lastListObj: {
+      id: null,
       name: '',
       data: [],
     },
-    playList: {
+    playListObj: {
+      id: null,
       name: '',
       data: [],
     },

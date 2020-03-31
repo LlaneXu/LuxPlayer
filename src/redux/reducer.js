@@ -30,13 +30,15 @@ const control = (state={}, action) =>  {
   switch (action.type) {
     case CONTROL.MODE:
       return {...state, mode: action.data};
-    case CONTROL.PLAY_LIST:
+    case CONTROL.NEW_LIST:
       console.log(action);
+      const {playListObj, currentIndex} = action.data;
       return {
         ...state,
-        playList: action.data,
-        lastList: state.playList,
-        historyList: state.lastList,
+        currentIndex,
+        playListObj,
+        lastListObj: state.playListObj,
+        historyListObj: state.lastListObj,
       };
     case CONTROL.CURRENT_INDEX:
       return {...state, currentIndex: action.data};

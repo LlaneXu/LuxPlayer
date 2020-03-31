@@ -97,14 +97,14 @@ class PlayList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      slider1ActiveSlide: 2,
+      sliderActiveSlide: 2,
     }
   }
-  renderItemHeader = (item,index) => {
+  renderPlayListHeader = (playListObj,index) => {
     const {control} = this.props;
-    const {name, data} = item;
+    const {name, data} = playListObj;
     const titleMap = ['历史播放','上次播放','当前播放'];
-    console.log(item)
+    console.log(playListObj)
     return (
       <View style={styles.headerContainer}>
         <View style={styles.headerTitle}>
@@ -135,13 +135,15 @@ class PlayList extends Component {
   };
   renderLine = (data, index, selected) => {
     if(data) {
+      console.log(data.artist);
+      const artist = data.artist.map((item) => item.name).join('&');
       return (
         <View style={{flex:1, margin: 5, flexDirection: 'row', justifyContent: 'space-between'}}>
           <View style={{flex: 0.8, flexDirection: 'row', alignItems: 'center'}}>
             <Text numberOfLines={1}>
               <Text style={styles.textFade}>{index+1}.</Text>
               <Text style={styles.text}>{data.name}</Text>
-              <Text style={styles.textFade}>-{data.artist.name}</Text>
+              <Text style={styles.textFade}>-{artist}</Text>
             </Text>
           </View>
           <View style={{marginRight: 10}}>
@@ -156,39 +158,48 @@ class PlayList extends Component {
     }
   };
 
-  renderItem = ({item, index}) => {
-    return (
-      <View style={{height: '100%'}}>
-        {this.renderItemHeader(item,index)}
-        <FlatList
-          style={{backgroundColor:'white',paddingLeft: 10}}
-          data={item.data}
-          keyExtractor={(item, index) => {
-            return item.id.toString();
-          }}
-          // initialScrollIndex={7}
-          // ItemSeparatorComponent={() => <View
-          //   style={{height: 1, width: '96%', backgroundColor: '#CED0CE', marginLeft: '2%'}}/>}
-          renderItem={({item, index, separators}) => this.renderLine(item, index)}
-        />
-      </View>
-    )
+  renderPlayList = ({item, index}) => {
+    if (item) {
+      return (
+        <View style={{height: '100%'}}>
+          {this.renderPlayListHeader(item,index)}
+          <FlatList
+            style={{backgroundColor:'white',paddingLeft: 10}}
+            data={item.data}
+            keyExtractor={(item, index) => {
+              return item.id.toString();
+            }}
+            // initialScrollIndex={7}
+            // ItemSeparatorComponent={() => <View
+            //   style={{height: 1, width: '96%', backgroundColor: '#CED0CE', marginLeft: '2%'}}/>}
+            renderItem={({item, index, separators}) => this.renderLine(item, index)}
+          />
+        </View>
+      );
+    } else {
+      return null;
+    }
   };
 
   render() {
     const { control } = this.props;
-    const {slider1ActiveSlide} = this.state;
-    const listData = [
-      control.historyList,
-      control.lastList,
-      control.playList,
-    ];
+    const {sliderActiveSlide} = this.state;
+    const listData = [];
+    if (control.historyListObj && control.historyListObj.id){
+      listData.push(control.historyListObj);
+    }
+    if (control.lastListObj && control.lastListObj.id){
+      listData.push(control.lastListObj);
+    }
+    if (control.playListObj && control.playListObj.id){
+      listData.push(control.playListObj);
+    }
     return (
       <View>
         {/*{this.renderItem({item:control.playList,index:2})}*/}
         <Pagination
           dotsLength={3}
-          activeDotIndex={slider1ActiveSlide}
+          activeDotIndex={sliderActiveSlide}
           containerStyle={{
             paddingVertical: 8
           }}
@@ -229,8 +240,8 @@ class PlayList extends Component {
         //   paddingLeft: 10,
         // //   paddingVertical: 10 // for custom animation
         // }}
-        onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
-        renderItem={this.renderItem}
+        onSnapToItem={(index) => this.setState({ sliderActiveSlide: index }) }
+        renderItem={this.renderPlayList}
       />
       </View>
     );

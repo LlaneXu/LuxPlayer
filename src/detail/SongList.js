@@ -14,12 +14,14 @@
  ***/
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import {
   FlatList,
   Text,
   View,
   StyleSheet,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import {
   Button,
@@ -29,6 +31,8 @@ import Loading from '../widget/Loading';
 
 
 import Icon from "react-native-vector-icons/Ionicons";
+import {CONTROL} from "../redux/actions";
+import {play} from '../player/control';
 
 
 
@@ -49,6 +53,8 @@ const styles = StyleSheet.create({
 
 class SongList extends PureComponent {
   static propTypes = {
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
     data: PropTypes.array.isRequired,
     loading: PropTypes.bool,
     style: PropTypes.object,
@@ -67,13 +73,13 @@ class SongList extends PureComponent {
       "id": 1427664555,
       "pst": 0,
       "t": 0,
-      "ar": [{
+      "artist": [{
         "id": 32781442,
         "name": "汪琪灿",
         "tns": [],
         "alias": []
           }],
-      "al": {
+      "album": {
         "id": 86283940,
         "name": "陈情令",
         "picUrl": "http://p1.music.126.net/2kSir3dxy185nIBrJTqspw==/109951164776401876.jpg",
@@ -85,16 +91,32 @@ class SongList extends PureComponent {
     */
   }
   renderItem = ({item, index, separators}) => {
-    const artist = item.ar.map((one) => one.name).join('&');
+    const { data, id, name } = this.props;
+    const artist = item.artist.map((one) => one.name).join('&');
     return (
       <View style={{flex:1, margin: 5, flexDirection: 'row', justifyContent: 'space-between'}}>
+        <TouchableOpacity onPress={()=> {
+          this.props.dispatch({
+            type: CONTROL.NEW_LIST,
+            data: {
+              currentIndex: index,
+              playListObj: {
+                id,
+                name,
+                data,
+              },
+            }
+          });
+          play(item);
+        }}>
         <View style={{flex: 0.8, flexDirection: 'row', alignItems: 'center'}}>
           <Text style={styles.textFade}>{index+1}.</Text>
           <View>
             <Text numberOfLines={1} style={styles.text}>{item.name}</Text>
-            <Text numberOfLines={1} style={styles.textFade}>{artist}-{item.al.name}</Text>
+            <Text numberOfLines={1} style={styles.textFade}>{artist}-{item.album.name}</Text>
           </View>
         </View>
+        </TouchableOpacity>
         <View style={{marginRight: 10}}>
           <Button transparent>
             <Icon name={'md-more'} size={25} color={'grey'}/>
@@ -131,4 +153,6 @@ class SongList extends PureComponent {
   }
 }
 
-export default SongList;
+export default connect( ({}) => ({
+  })
+)(SongList)

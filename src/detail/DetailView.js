@@ -19,32 +19,19 @@ import {
   FlatList, Text, View, Image, ImageBackground, StyleSheet, TouchableOpacity, SafeAreaView
 } from 'react-native';
 import {
-  Body,
   Button,
-  Left, Right, Title,
   Container,
-  Content,
-  Footer,
-  Tabs,
-  Card,
-  CardItem,
-  Spinner,
-  H3,
 } from 'native-base';
 
-import AlbumCover from '../widget/AlbumCover';
 import PublicHeader from '../widget/PublicHeader';
 import Loading from '../widget/Loading';
 
 import AlbumDescription from './AlbumDescription';
 import SongList from './SongList';
 
-import {album,playlist} from "../api";
+import {playlist} from "../api";
 import screen from '../utils/screen';
 import Icon from "react-native-vector-icons/Ionicons";
-import IconFontisto from 'react-native-vector-icons/Fontisto';
-import IconEvilIcons from 'react-native-vector-icons/EvilIcons';
-import IconFeather from 'react-native-vector-icons/Feather';
 
 
 
@@ -125,29 +112,10 @@ class DetailView extends PureComponent {
       })
     }
   }
-  renderItem = ({item, index, separators}) => {
-    const artist = item.ar.map((one) => one.name).join('&');
-    return (
-      <View style={{flex:1, margin: 5, flexDirection: 'row', justifyContent: 'space-between'}}>
-        <View style={{flex: 0.8, flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={styles.textFade}>{index+1}.</Text>
-          <View>
-            <Text numberOfLines={1} style={styles.text}>{item.name}</Text>
-            <Text numberOfLines={1} style={styles.textFade}>{artist}-{item.al.name}</Text>
-          </View>
-        </View>
-        <View style={{marginRight: 10}}>
-          <Button transparent>
-            <Icon name={'md-more'} size={25} color={'grey'}/>
-          </Button>
-        </View>
-      </View>
-    );
-  };
 
   render(): React.ReactNode {
-    const {id, loading, isPlayList, data} = this.state;
-    const { tracks=[] } = data;
+    const { loading, isPlayList, data} = this.state;
+    const { tracks=[], name='', id=0 } = data;
     const {navigation} = this.props;
     return (
       <Container>
@@ -159,7 +127,7 @@ class DetailView extends PureComponent {
           <PublicHeader title={isPlayList ? '歌单' : '专辑'}/>
           <View style={{flex:5}}>
           <AlbumDescription style={{flex:2}} data={data}/>
-          <SongList style={{flex:3}} data={tracks}/>
+          <SongList style={{flex:3}} data={tracks} id={id} name={name}/>
           </View>
         </Loading>
       </Container>

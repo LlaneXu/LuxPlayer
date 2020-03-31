@@ -38,7 +38,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMateriallcons from 'react-native-vector-icons/MaterialIcons';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
-import Slider from 'react-native-slider';
+import Slider from '@react-native-community/slider';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { connect } from 'react-redux';
 
@@ -59,7 +59,7 @@ class PlayerView extends PureComponent {
     songListVisible: false,
   };
   static getDerivedStateFromProps(nextProps, prevState) {
-    const {player} = nextProps;
+    const {player, control} = nextProps;
     if (!prevState.sliding) {
       const updateData = {};
       if (player.sliderProgress !== prevState.sliderProgress) {
@@ -241,8 +241,9 @@ class PlayerView extends PureComponent {
             <Slider
               maximumTrackTintColor={'#ffffff'}
               minimumTrackTintColor={'orangered'}
-              thumbStyle={styles.thumb}
-              trackStyle={{height: 2}}
+              thumbTintColor={'white'}
+              // thumbStyle={styles.thumb}
+              // trackStyle={{height: 2}}
               style={{width: screen.width - 100}}
               value={sliderProgress}
               onSlidingStart={ () => {this.setState({sliding: true})}}

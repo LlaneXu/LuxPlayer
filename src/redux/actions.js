@@ -20,7 +20,7 @@ export const PLAYER = {
 
 export const CONTROL = {
   MODE: 'MODE',
-  PLAY_LIST: 'PLAY_LIST',
+  NEW_LIST: 'NEW_LIST',
   CURRENT_INDEX: 'CURRENT_INDEX',
 };
 
