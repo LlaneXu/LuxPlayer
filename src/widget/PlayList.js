@@ -98,8 +98,32 @@ class PlayList extends Component {
     super(props);
     this.state = {
       sliderActiveSlide: 2,
+      data:[],
     }
   }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const {control: {historyListObj, lastListObj, playListObj}} = nextProps;
+    const {data}= prevState;
+    console.log(nextProps)
+    console.log(prevState)
+    if (!data.length || (playListObj.id !== data[data.length-1].id)) {
+      console.log('update');
+      const data = [];
+      if (historyListObj.id) {
+        data.push(historyListObj);
+      }
+      if (lastListObj.id) {
+        data.push(lastListObj);
+      }
+      data.push(playListObj);
+      return {
+        sliderActiveSlide: data.length,
+        data,
+      }
+    }
+    return null;
+  }
+
   renderPlayListHeader = (playListObj,index) => {
     const {control} = this.props;
     const {name, data} = playListObj;
@@ -183,22 +207,12 @@ class PlayList extends Component {
 
   render() {
     const { control } = this.props;
-    const {sliderActiveSlide} = this.state;
-    const listData = [];
-    if (control.historyListObj && control.historyListObj.id){
-      listData.push(control.historyListObj);
-    }
-    if (control.lastListObj && control.lastListObj.id){
-      listData.push(control.lastListObj);
-    }
-    if (control.playListObj && control.playListObj.id){
-      listData.push(control.playListObj);
-    }
+    const {sliderActiveSlide, data} = this.state;
     return (
       <View>
         {/*{this.renderItem({item:control.playList,index:2})}*/}
         <Pagination
-          dotsLength={3}
+          dotsLength={data.length}
           activeDotIndex={sliderActiveSlide}
           containerStyle={{
             paddingVertical: 8
@@ -218,11 +232,11 @@ class PlayList extends Component {
         />
       <Carousel
         layout={'default'}
-        data={listData}
+        data={data}
         sliderWidth={screen.width}
         itemWidth={screen.width-40}
         // hasParallaxImages={true}
-        firstItem={2}
+        firstItem={data.length-1}
         inactiveSlideScale={0.95}
         inactiveSlideOpacity={0.7}
         // slideStyle={{margin: 10}}

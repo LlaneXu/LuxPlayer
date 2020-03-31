@@ -94,17 +94,17 @@ function test() {
       },
     }
   });
-  store.dispatch({
-    type: CONTROL.NEW_LIST,
-    data: {
-      currentIndex: 0,
-      playListObj: {
-        id: 3,
-        name: '自定义歌单',
-        data: playList,
-      },
-    }
-  });
+  // store.dispatch({
+  //   type: CONTROL.NEW_LIST,
+  //   data: {
+  //     currentIndex: 0,
+  //     playListObj: {
+  //       id: 3,
+  //       name: '自定义歌单',
+  //       data: playList,
+  //     },
+  //   }
+  // });
 }
 test();
 
