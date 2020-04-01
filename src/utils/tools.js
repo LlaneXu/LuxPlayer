@@ -12,6 +12,7 @@
  Todo:
 
  ***/
+import Toast from 'react-native-root-toast';
 
 export const secondToString = (time) => {
   const minute = Math.floor(time/60);
@@ -26,4 +27,12 @@ export function getRandomIntBetween(min: number, max: number) {
 
 export function switchItems(list: Array, indexA: number, indexB: number) {
   [list[indexA], list[indexB]] = [list[indexB], list[indexA]]
+}
+
+
+export function toast(text) {
+  Toast.show(text, {
+    duration: 100,
+    position: -120,
+  });
 }

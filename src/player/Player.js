@@ -23,7 +23,7 @@ import {
 import {connect} from 'react-redux';
 import { PLAYER } from '../redux/actions';
 import {secondToString} from '../utils/tools';
-import { updateRef, playOrPause, playSong, seek, playNext } from './control'
+import {updateRef, playOrPause, playSong, seek, playNext, onEndProcess, onErrorProcess} from './control'
 
 
 class Player extends PureComponent {
@@ -87,7 +87,7 @@ class Player extends PureComponent {
     */
     console.log('onload', data);
     this.props.dispatch({
-      type: PLAYER.SONG_STATUS,
+      type: PLAYER.STATUS,
       data: {
         ...data,
         durationReadable: secondToString(data.duration),
@@ -104,7 +104,7 @@ class Player extends PureComponent {
     // console.log('onProgress', data);
     const { player: {duration} } = this.props;
     this.props.dispatch({
-      type: PLAYER.SONG_STATUS,
+      type: PLAYER.STATUS,
       data: {
         ...data,
         sliderProgress: data.currentTime/duration,
@@ -118,10 +118,11 @@ class Player extends PureComponent {
     isExternalPlaybackActive	boolean	Boolean indicating whether external playback mode is active
      */
     console.log('onEnd')
-    playNext(false);
+    onEndProcess();
   };
   onError = (data) => {
-    console.log('onError', data)
+    console.log('onError', data);
+    onErrorProcess();
   };
   onBuffer = (data) => {
     console.log('onBuffer:', data);

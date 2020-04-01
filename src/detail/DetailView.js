@@ -65,7 +65,7 @@ class DetailView extends PureComponent {
     /*
     playlist data:
     {
-      "id": 2719385392,
+      "id": 2719385392, #id => neteaseId
       "name": "《陈情令》歌曲全收录",
       "description": "“蓝湛，这首曲子叫什么名字啊？” “忘羡”",
       "tracks": [{
@@ -73,14 +73,14 @@ class DetailView extends PureComponent {
         "id": 1427664555,
         "pst": 0,
         "t": 0,
-        "ar": [{
-          "id": 32781442,
+        "artist": [{
+          "id": 32781442, # id => neteaseId
           "name": "汪琪灿",
           "tns": [],
           "alias": []
             }],
-        "al": {
-          "id": 86283940,
+        "album": {
+          "id": 86283940, # id => neteaseId
           "name": "陈情令",
           "picUrl": "http://p1.music.126.net/2kSir3dxy185nIBrJTqspw==/109951164776401876.jpg",
           "tns": [],
@@ -96,6 +96,7 @@ class DetailView extends PureComponent {
       "playCount": 1234,
       "commentCount": 123123,
       "shareCount": 12412,
+      "platform": "netease",
     }
      */
     // personalized('netease').then((data) => {
@@ -107,6 +108,9 @@ class DetailView extends PureComponent {
     this.setState({id,isPlayList});
     if (isPlayList) {
       playlist("netease", id).then((data) => {
+        data.tracks.forEach((item) => {
+          item.platform = 'netease';
+        });
         console.log(data);
         this.setState({loading: false, data})
       })

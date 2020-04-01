@@ -15,9 +15,8 @@
 
 import { store, modeOptions } from '../redux/stores';
 import {PLAYER, CONTROL} from '../redux/actions';
-import Toast from 'react-native-root-toast';
 // import { Toast } from '@ant-design/react-native';
-import { getRandomIntBetween, switchItems } from '../utils/tools';
+import { getRandomIntBetween, switchItems, toast } from '../utils/tools';
 
 let playerRef=null;
 
@@ -109,21 +108,19 @@ function test() {
 test();
 
 const getUrlByID = (id) => {
+
   return testUrl[id];
 };
 
 export const playOrPause = () => {
   const {player, control} = store.getState();
-  Toast.show(player.playing? '暂停':'播放', {
-    duration: 100,
-    position: -120,
-  });
+  toast(player.playing? '暂停':'播放');
   if (!player.url) {
     console.log(getUrlByID(control.currentIndex));
-    playSong(getUrlByID(control.currentIndex));
+    play();
   } else {
     store.dispatch({
-      type: PLAYER.SONG_STATUS,
+      type: PLAYER.STATUS,
       data: {
         playing: !player.playing,
       },
@@ -131,9 +128,38 @@ export const playOrPause = () => {
   }
 };
 
-export const play = (track) => {
-  // console.log('play track: ', track);
+const platformSequence = ['url', 'local','netease', 'kugou', 'qq'];
+const tips = ['', '本地源', '网易源', '酷狗源', 'qq源'];
+
+export const play = (platformIndex=0) => {
+  const {player: {meta}} = store.getState();
+  const url = getUrlbyMeta(platformIndex, platformSequence[platformIndex]);
+  playSong(url);
 };
+
+export const onErrorProcess = () => {
+  const {player: {meta}} = store.getState();
+  let {platformIndex=0} = meta;
+  platformIndex++;
+  if (platformIndex >= platformSequence.length) {
+    toast(`播放失败`);
+    playNext();
+    platformIndex = 0;
+  } else {
+    toast(`失败，尝试${tips[platformIndex]}`);
+    play(platformIndex);
+  }
+  /* restore the data status */
+  meta.platformIndex = platformIndex;
+  store.dispatch({
+    type: PLAYER.DATA,
+    data: meta,
+  });
+};
+export const onEndProcess = () => {
+  playNext();
+};
+
 export const playSong = (url) => {
   console.log(url);
   const updateData = {
@@ -142,7 +168,7 @@ export const playSong = (url) => {
     // playing: false,
   };
   store.dispatch({
-    type: PLAYER.SONG_STATUS,
+    type: PLAYER.STATUS,
     data: {
       ...updateData,
     },
@@ -153,7 +179,7 @@ export const seek = (seekPos) => {
   const {player} = store.getState();
   console.log(seekPos);
   store.dispatch({
-    type: PLAYER.SONG_STATUS,
+    type: PLAYER.STATUS,
     data: {
       sliderProgress: seekPos,
       // seekPos: seekPos*player.duration,

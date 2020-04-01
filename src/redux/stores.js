@@ -15,6 +15,7 @@
 
 import { createStore } from 'redux';
 import reducer from './reducer';
+import {PLAYER} from "./actions";
 
 export const modeOptions = {
   cycle: '循环',
@@ -27,6 +28,8 @@ export let store = createStore(reducer, {
     id: 0,
     playing: false,
     url: '',
+    seekPos: 0,
+    data: {},
   },
   control: {
     mode: 'cycle', //  random | cycle | cycleOne
@@ -67,4 +70,20 @@ export let store = createStore(reducer, {
  }]
  */
 
+// let currentListObj = {};
+// function handleChange() {
+//   let prev = currentListObj;
+//   const {player, control} = store.getState();
+//   let current = control.playListObj;
+//   if (current.id !== prev.id) {
+//     console.log(`found playlist change from ${prev.id} to ${current.id}`);
+//     // store.dispatch({
+//     //   type: PLAYER.DATA,
+//     //   data: control.playListObj.data[control.currentIndex],
+//     // });
+//     console.log(store.getState());
+//   }
+// }
+//
+// store.subscribe(handleChange)
 console.log(store.getState());

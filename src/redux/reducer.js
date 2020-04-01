@@ -17,10 +17,12 @@ import { PLAYER, CONTROL, API } from "./actions";
 
 const player = (state={}, action) =>  {
   switch (action.type) {
-    case PLAYER.SONG_ID:
-      return {...state, id: action.data};
-    case PLAYER.SONG_STATUS:
+    case PLAYER.PLAYING:
+      return {...state, playing: action.data};
+    case PLAYER.STATUS:
       return {...state, ...action.data};
+    case PLAYER.DATA:
+      return {...state, id: action.data.id, data: action.data};
     default:
       return {...state};
   }
@@ -31,17 +33,26 @@ const control = (state={}, action) =>  {
     case CONTROL.MODE:
       return {...state, mode: action.data};
     case CONTROL.NEW_LIST:
-      console.log(action);
-      const {playListObj, currentIndex} = action.data;
-      return {
-        ...state,
-        currentIndex,
-        playListObj,
-        lastListObj: state.playListObj,
-        historyListObj: state.lastListObj,
-      };
+      // console.log(action);
+      // const {playListObj, currentIndex} = action.data;
+      // if (playListObj.id === state.playListObj.id) {
+      //   console.log('equal:',playListObj.id,state.playListObj.id)
+      //   return {
+      //     ...state,
+      //     currentIndex,
+      //   }
+      // } else {
+      //   console.log('not equal:',playListObj.id,state.playListObj.id)
+      //   return {
+      //     ...state,
+      //     currentIndex,
+      //     playListObj,
+      //     lastListObj: state.playListObj,
+      //     historyListObj: state.lastListObj,
+      //   };
+      // }
     case CONTROL.CURRENT_INDEX:
-      return {...state, currentIndex: action.data};
+      // return {...state, currentIndex: action.data};
     default:
       return {...state};
   }
@@ -62,8 +73,78 @@ const personalized = (state={}, action) =>  {
   }
 };
 
-export default combineReducers({
+
+const combinedReducer = combineReducers({
   player,
   control,
   personalized,
-})
+});
+const crossSliceReducer = (state, action) => {
+  let {player, control} = state;
+  console.log('action: ',action);
+  const {data} = action;
+  switch (action.type) {
+    case CONTROL.NEW_LIST:
+      if (data.playListObj.id === control.playListObj.id) {
+        console.log('equal:', data.playListObj.id, control.playListObj.id)
+        control = {
+          ...control,
+          currentIndex: data.currentIndex,
+        };
+        player = {
+          ...player,
+          data: data.playListObj.data[data.currentIndex],
+        };
+        return {
+          ...state,
+          player,
+          control,
+        }
+      } else {
+        console.log('not equal:', data.playListObj.id, control.playListObj.id)
+        control = {
+          ...control,
+          currentIndex: data.currentIndex,
+          playListObj: data.playListObj,
+          lastListObj: control.playListObj,
+          historyListObj: control.lastListObj,
+        };
+        player = {
+          ...player,
+          data: data.playListObj.data[data.currentIndex],
+        };
+        return {
+          ...state,
+          player,
+          control,
+        };
+      }
+    case CONTROL.CURRENT_INDEX:
+      control = {
+        ...control,
+        currentIndex: data.currentIndex,
+      };
+      player = {
+        ...player,
+        data: data.playListObj.data[data.currentIndex],
+      };
+      return {
+        ...state,
+        player,
+        control,
+      };
+    default:
+      return {...state};
+  }
+};
+
+export default (state, action) => {
+  const intermediateState = combinedReducer(state, action);
+  return crossSliceReducer(intermediateState, action)
+};
+
+// export default combineReducers({
+//   player,
+//   control,
+//   personalized,
+// })

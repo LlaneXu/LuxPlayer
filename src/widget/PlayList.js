@@ -104,10 +104,7 @@ class PlayList extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const {control: {historyListObj, lastListObj, playListObj}} = nextProps;
     const {data}= prevState;
-    console.log(nextProps)
-    console.log(prevState)
     if (!data.length || (playListObj.id !== data[data.length-1].id)) {
-      console.log('update');
       const data = [];
       if (historyListObj.id) {
         data.push(historyListObj);
@@ -128,7 +125,6 @@ class PlayList extends Component {
     const {control} = this.props;
     const {name, data} = playListObj;
     const titleMap = ['历史播放','上次播放','当前播放'];
-    console.log(playListObj)
     return (
       <View style={styles.headerContainer}>
         <View style={styles.headerTitle}>
@@ -159,7 +155,6 @@ class PlayList extends Component {
   };
   renderLine = (data, index, selected) => {
     if(data) {
-      console.log(data.artist);
       const artist = data.artist.map((item) => item.name).join('&');
       return (
         <View style={{flex:1, margin: 5, flexDirection: 'row', justifyContent: 'space-between'}}>
