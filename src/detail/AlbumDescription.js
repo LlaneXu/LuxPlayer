@@ -113,30 +113,30 @@ class AlbumDescription extends PureComponent {
             flexDirection: 'row',
             justifyContent: 'space-around',
           }}>
-          <AlbumCover data={data} size={150}/>
-          <View style={{flex: 1, margin: 20}}>
-            <H3>{data.name}</H3>
+          <AlbumCover data={data} size={150} style={{marginLeft: 5, marginRight:5}}/>
+          <View style={{flex: 1, margin:5}}>
+            <Text style={{fontSize:18, fontWeight: 'bold'}}>{data.name}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text numberOfLines={2} style={{marginTop: 20}}>{data.description}</Text>
+              <Text numberOfLines={2} style={{marginTop: 10}}>{data.description}</Text>
               <Icon style={{marginLeft: 10}} name={'ios-arrow-forward'}/>
             </View>
           </View>
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+        <View style={{marginTop:5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
           <View style={{alignItems: 'center'}}>
-            <IconFeather size={25} name={'message-circle'}/>
+            <IconFeather size={20} name={'message-circle'}/>
             <Text>{data.commentCount}</Text>
           </View>
           <View style={{alignItems: 'center'}}>
-            <IconFeather size={25} name={'share'}/>
+            <IconFeather size={20} name={'share'}/>
             <Text>{data.shareCount}</Text>
           </View>
           <View style={{alignItems: 'center'}}>
-            <IconFeather size={25} name={'download'}/>
+            <IconFeather size={20} name={'download'}/>
             <Text>下载</Text>
           </View>
           <View style={{alignItems: 'center'}}>
-            <IconFeather size={25} name={'check-circle'}/>
+            <IconFeather size={20} name={'check-circle'}/>
             <Text>多选</Text>
           </View>
         </View>

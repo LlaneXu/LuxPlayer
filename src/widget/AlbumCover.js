@@ -35,7 +35,7 @@ export default class AlbumCover extends Component {
   }
 
   render() {
-    const { data, size=150 } = this.props;
+    const { data, size=150, style } = this.props;
     let playCount = data.playCount;
     let unit = '';
     if (playCount) {
@@ -50,7 +50,7 @@ export default class AlbumCover extends Component {
       playCount = playCount.toFixed(0) + unit;
     }
     return (
-      <View style={{margin: 10, width: size, height: size}}>
+      <View style={{ width: size, height: size, ...style}}>
         <ImageBackground
           source={{uri: data.picUrl}}
           style={{

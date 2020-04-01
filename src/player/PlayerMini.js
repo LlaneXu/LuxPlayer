@@ -46,7 +46,6 @@ class PlayerMini extends PureComponent {
   }
   render(): React.ReactNode {
     const { navigation } = this.props;
-    console.log(navigation);
     return (
       <View style={{marginBottom:0, position: 'absolute', height: 50, widget: screen.width}}>
         <TouchableOpacity onPress={() => {

@@ -107,7 +107,7 @@ class SongList extends PureComponent {
               },
             }
           });
-          play(item);
+          // play(item);
         }}>
         <View style={{flex: 0.8, flexDirection: 'row', alignItems: 'center'}}>
           <Text style={styles.textFade}>{index+1}.</Text>

@@ -36,3 +36,7 @@ export function toast(text) {
     position: -120,
   });
 }
+
+export function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

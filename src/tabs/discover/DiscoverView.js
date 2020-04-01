@@ -30,7 +30,7 @@ import {
 import AlbumCover from '../../widget/AlbumCover';
 
 
-import {personalized} from "../../api";
+import api from "../../api";
 import screen from '../../utils/screen';
 
 class DiscoverView extends PureComponent {
@@ -56,7 +56,7 @@ class DiscoverView extends PureComponent {
       "alg": "featured"
     },
      */
-    personalized('netease').then((data) => {
+    api.personalized('netease').then((data) => {
       data.forEach((item) => {item.platform = 'netease'});
       this.setState({data});
     })
@@ -65,6 +65,9 @@ class DiscoverView extends PureComponent {
   render(): React.ReactNode {
     const {data} = this.state;
     const { navigation } = this.props;
+    console.log('width: ', screen.width)
+    console.log('height: ', screen.height)
+    const itemWidth = parseInt(screen.width/3) - 10
     return (
       <View
         style={{
@@ -75,10 +78,10 @@ class DiscoverView extends PureComponent {
         }}>
         {data.map((item) => {
           return (
-            <View key={item.id} style={{margin: 5, width: 120, alignItems:'center'}}>
+            <View key={item.id} style={{margin: 5, width: itemWidth, alignItems:'center'}}>
               <TouchableOpacity onPress={() => {console.log(item);navigation.navigate('DetailView', {id: item.id, isPlayList: true})}}>
-                <AlbumCover data={item} size={120}/>
-                <Text numberOfLines={2} style={{fontSize:15}}>{item.name}</Text>
+                <AlbumCover data={item} size={itemWidth}/>
+                <Text numberOfLines={2} style={{marginLeft: 10, marginRight:10, fontSize:15}}>{item.name}</Text>
               </TouchableOpacity>
             </View>
           );

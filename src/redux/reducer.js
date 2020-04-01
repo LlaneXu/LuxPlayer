@@ -81,18 +81,18 @@ const combinedReducer = combineReducers({
 });
 const crossSliceReducer = (state, action) => {
   let {player, control} = state;
-  console.log('action: ',action);
   const {data} = action;
   switch (action.type) {
     case CONTROL.NEW_LIST:
       if (data.playListObj.id === control.playListObj.id) {
-        console.log('equal:', data.playListObj.id, control.playListObj.id)
         control = {
           ...control,
           currentIndex: data.currentIndex,
         };
         player = {
           ...player,
+          id: data.playListObj.data[data.currentIndex].id,
+          platformIndex: 0,
           data: data.playListObj.data[data.currentIndex],
         };
         return {
@@ -101,7 +101,6 @@ const crossSliceReducer = (state, action) => {
           control,
         }
       } else {
-        console.log('not equal:', data.playListObj.id, control.playListObj.id)
         control = {
           ...control,
           currentIndex: data.currentIndex,
@@ -111,6 +110,8 @@ const crossSliceReducer = (state, action) => {
         };
         player = {
           ...player,
+          id: data.playListObj.data[data.currentIndex].id,
+          platformIndex: 0,
           data: data.playListObj.data[data.currentIndex],
         };
         return {
@@ -126,6 +127,8 @@ const crossSliceReducer = (state, action) => {
       };
       player = {
         ...player,
+        id: data.playListObj.data[data.currentIndex].id,
+        platformIndex: 0,
         data: data.playListObj.data[data.currentIndex],
       };
       return {
@@ -142,9 +145,3 @@ export default (state, action) => {
   const intermediateState = combinedReducer(state, action);
   return crossSliceReducer(intermediateState, action)
 };
-
-// export default combineReducers({
-//   player,
-//   control,
-//   personalized,
-// })

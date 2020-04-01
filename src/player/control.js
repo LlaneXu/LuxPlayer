@@ -16,7 +16,8 @@
 import { store, modeOptions } from '../redux/stores';
 import {PLAYER, CONTROL} from '../redux/actions';
 // import { Toast } from '@ant-design/react-native';
-import { getRandomIntBetween, switchItems, toast } from '../utils/tools';
+import { getRandomIntBetween, switchItems, toast, sleep } from '../utils/tools';
+import api from '../api';
 
 let playerRef=null;
 
@@ -107,16 +108,41 @@ function test() {
 }
 test();
 
-const getUrlByID = (id) => {
-
-  return testUrl[id];
-};
+async function getUrlByMeta(meta, platform){
+  let query = {};
+  let data;
+  let err;
+  switch (platform) {
+    case 'url':
+      return meta.url;
+    case 'local':
+      if (meta.platform === 'netease') {
+        query.neteaseId = meta.id;
+      } else if (meta.platform === 'kugou') {
+        query.kugouId = meta.id;
+      } else if (meta.platform === 'qq') {
+        query.qqId = meta.id;
+      }
+      [err, data] = await api.url(platform, query).then(data =>[null,data]).catch(err => [err, null]);
+      return data.url;
+    case 'netease':
+    case 'kugou':
+    case 'qq':
+      [err, data] = await api.url(platform, {id:meta.id}).then(data =>[null,data]).catch(err => [err, null]);
+      if (err != null) {
+        return null;
+      } else {
+        return data.url;
+      }
+    default:
+      return null;
+  }
+}
 
 export const playOrPause = () => {
   const {player, control} = store.getState();
   toast(player.playing? '暂停':'播放');
   if (!player.url) {
-    console.log(getUrlByID(control.currentIndex));
     play();
   } else {
     store.dispatch({
@@ -131,37 +157,52 @@ export const playOrPause = () => {
 const platformSequence = ['url', 'local','netease', 'kugou', 'qq'];
 const tips = ['', '本地源', '网易源', '酷狗源', 'qq源'];
 
-export const play = (platformIndex=0) => {
-  const {player: {meta}} = store.getState();
-  const url = getUrlbyMeta(platformIndex, platformSequence[platformIndex]);
-  playSong(url);
+export const play = () => {
+  const {player: {platformIndex=0,data}} = store.getState();
+  console.log('data=',data)
+  console.log('platformIndex=',platformIndex)
+  getUrlByMeta(data, platformSequence[platformIndex]).then((url) => {
+    if (!url) {
+      console.log('url invalid')
+      onErrorProcess()
+    } else {
+      playSong(url);
+    }
+  })
 };
 
-export const onErrorProcess = () => {
-  const {player: {meta}} = store.getState();
-  let {platformIndex=0} = meta;
+export async function onErrorProcess (){
+  console.log('onErrorProcess');
+  let {player: {platformIndex=0, data}} = store.getState();
+  console.log('data=',data)
+  console.log('platformIndex=',platformIndex)
   platformIndex++;
-  if (platformIndex >= platformSequence.length) {
-    toast(`播放失败`);
-    playNext();
-    platformIndex = 0;
-  } else {
-    toast(`失败，尝试${tips[platformIndex]}`);
-    play(platformIndex);
-  }
   /* restore the data status */
-  meta.platformIndex = platformIndex;
   store.dispatch({
-    type: PLAYER.DATA,
-    data: meta,
+    type: PLAYER.STATUS,
+    data: {
+      platformIndex
+    },
   });
-};
+  if (platformIndex >= platformSequence.length) {
+    console.log('播放失败');
+    toast(`播放失败`);
+    await sleep(1000);
+    playNext();
+  } else {
+    console.log(`失败，尝试${tips[platformIndex]}`);
+    toast(`失败，尝试${tips[platformIndex]}`);
+    await sleep(1000);
+    play();
+  }
+}
+
 export const onEndProcess = () => {
   playNext();
 };
 
 export const playSong = (url) => {
-  console.log(url);
+  console.log('url=',url);
   const updateData = {
     url,
     seekPos: 0,

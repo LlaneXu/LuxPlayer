@@ -29,6 +29,7 @@ export let store = createStore(reducer, {
     playing: false,
     url: '',
     seekPos: 0,
+    platformIndex: 0,
     data: {},
   },
   control: {

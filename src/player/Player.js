@@ -23,17 +23,19 @@ import {
 import {connect} from 'react-redux';
 import { PLAYER } from '../redux/actions';
 import {secondToString} from '../utils/tools';
-import {updateRef, playOrPause, playSong, seek, playNext, onEndProcess, onErrorProcess} from './control'
+import {updateRef, playOrPause, playSong, seek, playNext, onEndProcess, onErrorProcess, play} from './control'
 
 
 class Player extends PureComponent {
   state = {
     url: null,  // used to define whether to start a new audio
     // seekPos: null, // used to response a seek action
+    id: 0,
+    // playing: false,
+    // platformIndex: 0,
   };
   /* big hole here, better not to use. */
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log(nextProps, prevState);
     if (nextProps.player.url !== prevState.url) {
       const ret = {
         url: nextProps.player.url,
@@ -41,6 +43,12 @@ class Player extends PureComponent {
 
       console.log('getDerivedStateFromProps: ', ret);
       return ret
+    } else if( nextProps.player.id !== prevState.id) {
+      console.log('received a new song: ', nextProps.player.id);
+      play();
+      return {
+        id: nextProps.player.id,
+      };
     } else {
       return null;
     }
@@ -149,8 +157,6 @@ class Player extends PureComponent {
     const { url } = this.state;
     const {player} = this.props;
     // this.onSeek();
-    console.log('url:',url)
-    console.log('player.playing:',player.playing)
     // console.log('playering',player.playing)
     return (
       <View>

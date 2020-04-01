@@ -29,7 +29,7 @@ import Loading from '../widget/Loading';
 import AlbumDescription from './AlbumDescription';
 import SongList from './SongList';
 
-import {playlist} from "../api";
+import api from "../api";
 import screen from '../utils/screen';
 import Icon from "react-native-vector-icons/Ionicons";
 
@@ -107,7 +107,7 @@ class DetailView extends PureComponent {
     console.log(this.props);
     this.setState({id,isPlayList});
     if (isPlayList) {
-      playlist("netease", id).then((data) => {
+      api.playlist("netease", id).then((data) => {
         data.tracks.forEach((item) => {
           item.platform = 'netease';
         });
@@ -129,9 +129,9 @@ class DetailView extends PureComponent {
             blurRadius={8} source={{uri: data.picUrl}}
           />
           <PublicHeader title={isPlayList ? '歌单' : '专辑'}/>
-          <View style={{flex:5}}>
-          <AlbumDescription style={{flex:2}} data={data}/>
-          <SongList style={{flex:3}} data={tracks} id={id} name={name}/>
+          <View style={{flex:1}}>
+          <AlbumDescription style={{height:200}} data={data}/>
+          <SongList style={{flex:1}} data={tracks} id={id} name={name}/>
           </View>
         </Loading>
       </Container>
