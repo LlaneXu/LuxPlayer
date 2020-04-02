@@ -155,7 +155,8 @@ class PlayList extends Component {
   };
   renderLine = (data, index, selected) => {
     if(data) {
-      const artist = data.artist.map((item) => item.name).join('&');
+      // console.log(data)
+      const artist = data.artists.map((item) => item.name).join('&');
       return (
         <View style={{flex:1, margin: 5, flexDirection: 'row', justifyContent: 'space-between'}}>
           <View style={{flex: 0.8, flexDirection: 'row', alignItems: 'center'}}>

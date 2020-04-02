@@ -44,6 +44,7 @@ import { connect } from 'react-redux';
 
 import { screen } from '../utils';
 import { playOrPause, playNext, playPrev, changeMode, seek } from './control';
+import api from '../api';
 import RepeatMode from '../widget/RepeatMode';
 // import PopUp from '../widget/PopUp';
 import { modeOptions } from '../redux/stores';
@@ -52,14 +53,30 @@ import Provider from "react-redux/es/components/Provider";
 
 class PlayerView extends PureComponent {
   state = {
+    id: null,
     showLyric: false,
+    lyrics: null,
+    albumPic: null,
+    artistPic: null,
     sliderProgress: 0,
     sliding: false,
     playing: false,
     songListVisible: false,
   };
   static getDerivedStateFromProps(nextProps, prevState) {
-    const {player, control} = nextProps;
+    const {player} = nextProps;
+    if (player.id !== prevState.id) {
+      const {data} = player;
+      return {
+        id: player.id,
+        data,
+      }
+      // console.log('to get song')
+      // api.song(data.platform, nextProps.player.id).then((data) => {
+      //   console.log('get song: ', data);
+      //   return null;
+      // })
+    }
     if (!prevState.sliding) {
       const updateData = {};
       if (player.sliderProgress !== prevState.sliderProgress) {
@@ -71,7 +88,6 @@ class PlayerView extends PureComponent {
       return updateData;
     }
     return null;
-
   }
   componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
     if (this.state.playing !== prevState.playing) {
@@ -143,6 +159,7 @@ class PlayerView extends PureComponent {
       outputRange: ['-35deg', '-5deg']
     });
     const { showLyrics } = this.state;
+    const { data } = this.state;
     return (
       <View style={{position: 'absolute', opacity: showLyrics ? 0.1 : 1}}>
         <View
@@ -167,7 +184,7 @@ class PlayerView extends PureComponent {
           alignItems: 'center'
         }}>
           <Animated.Image
-            source={{uri: 'http://p1.music.126.net/T9nGuH3jv0Rq0iWYeOhvAQ==/30786325589804.jpg' + '?param=200y200'}}
+            source={{uri: data.album.picUrl + '?param=200y200'}}
             style={[{
               width: screen.width - 152,
               height: screen.width - 152,
@@ -184,25 +201,29 @@ class PlayerView extends PureComponent {
   };
   popUp = React.createRef();
   render(): React.ReactNode {
-    const { player, control, navigation } = this.props;
+    const { navigation } = this.props;
+    const {data, playing} = this.state;
+    console.log(data)
+    const artist = data.artists.map(item => item.name).join('&');
     const { sliderProgress, songListVisible } = this.state;
     return (
       <View style={styles.container}>
         <Image
           style={{width: screen.width, height: screen.height, position: 'absolute', zIndex: 1, opacity: 0.8}}
-          blurRadius={8} source={{uri: 'http://p1.music.126.net/T9nGuH3jv0Rq0iWYeOhvAQ==/30786325589804.jpg' + '?param=200y200'}}
+          blurRadius={8}
+          source={{uri: data.album.picUrl + '?param=200y200'}}
         />
-        <View style={{zIndex: 5, flex: 1}}>
+        <View style={{zIndex: 5, flex: 6}}>
           <Header transparent>
-            <Left style={{flex:1}}>
+            <Left>
               <Button transparent onPress={() => {console.log('goback');return navigation.goBack();}}>
                 <Icon name={'ios-arrow-back'} size={25} color={'white'}/>
               </Button>
             </Left>
-            <Body style={{flex:1}}>
-              <Title style={{alignSelf: 'center'}}>歌名 作者</Title>
+            <Body style={{flex:4}}>
+              <Title style={{alignSelf: 'center'}}>{data.name} - {artist}</Title>
             </Body>
-            <Right style={{flex:1}}>
+            <Right>
               <Button transparent>
                 <Icon name={'ios-redo'} size={25} color={'white'}/>
               </Button>
@@ -234,7 +255,7 @@ class PlayerView extends PureComponent {
           <View style={styles.sliderBtn}>
             <Left>
               <Text style={{color: 'white'}}>
-              {player.currentTimeReadable}
+              {/*{player.currentTimeReadable}*/}
               </Text>
             </Left>
             <Body>
@@ -252,7 +273,7 @@ class PlayerView extends PureComponent {
             </Body>
             <Right>
               <Text style={{color: 'white'}}>
-                {player.durationReadable}
+                {/*{player.durationReadable}*/}
               </Text>
             </Right>
           </View>
@@ -261,8 +282,8 @@ class PlayerView extends PureComponent {
             <Button transparent onPress={playPrev}>
               <Icon name="ios-skip-backward" size={30} color={'white'}/>
             </Button>
-            <Button transparent onPress={playOrPause}>
-            {player.playing ? (
+            <Button transparent onPress={()=> {playOrPause();this.setState({playing: !playing})}}>
+            {playing ? (
                 <IconMateriallcons name="pause" size={80} color={'white'}/>
             ) : (
                 <IconMateriallcons name="play-arrow" size={80} color={'white'}/>
@@ -360,8 +381,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect( ({player, control}) => ({
+export default connect( ({player}) => ({
   player,
-  control,
 })
 )(PlayerView);

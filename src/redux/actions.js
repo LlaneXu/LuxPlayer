@@ -19,6 +19,11 @@ export const PLAYER = {
   DATA: 'PLAYER_DATA',
 };
 
+export const SLIDER = {
+  CLEAR: 'SLIDER_CLEAR',
+  UPDATE: 'SLIDER_UPDATE',
+};
+
 export const CONTROL = {
   MODE: 'CONTROL_MODE',
   NEW_LIST: 'CONTROL_NEW_LIST',

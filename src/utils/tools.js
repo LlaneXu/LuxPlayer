@@ -21,6 +21,9 @@ export const secondToString = (time) => {
 };
 
 export function getRandomIntBetween(min: number, max: number) {
+  /***
+   * min and max are included.
+   */
   return Math.floor(Math.random() * (max-min+1))+min;
 }
 
@@ -31,10 +34,10 @@ export function switchItems(list: Array, indexA: number, indexB: number) {
 
 
 export function toast(text) {
-  Toast.show(text, {
-    duration: 100,
-    position: -120,
-  });
+  // Toast.show(text, {
+  //   duration: 100,
+  //   position: -120,
+  // });
 }
 
 export function sleep(ms) {

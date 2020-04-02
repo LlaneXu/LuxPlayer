@@ -52,7 +52,7 @@ export default class AlbumCover extends Component {
     return (
       <View style={{ width: size, height: size, ...style}}>
         <ImageBackground
-          source={{uri: data.picUrl}}
+          source={{uri: `${data.picUrl}?param=${size}y${size}`}}
           style={{
             flex:1,
             flexDirection: 'row',

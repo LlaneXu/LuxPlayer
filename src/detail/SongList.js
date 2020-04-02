@@ -92,7 +92,7 @@ class SongList extends PureComponent {
   }
   renderItem = ({item, index, separators}) => {
     const { data, id, name } = this.props;
-    const artist = item.artist.map((one) => one.name).join('&');
+    const artist = item.artists.map((one) => one.name).join('&');
     return (
       <View style={{flex:1, margin: 5, flexDirection: 'row', justifyContent: 'space-between'}}>
         <TouchableOpacity onPress={()=> {

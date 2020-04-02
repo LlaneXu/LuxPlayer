@@ -44,6 +44,10 @@ function album(platform='netease', id) {
   return http.get(`${base}/album/${platform}/?id=${id}`);
 }
 
+function song(platform='netease', id) {
+  return http.get(`${base}/song/${platform}/?id=${id}`);
+}
+
 function url(platform='netease', params={}) {
   const query = parseParam(params);
   return http.get(`${base}/url/${platform}/?${query}`);
@@ -53,5 +57,6 @@ export default {
   personalized,
   playlist,
   album,
+  song,
   url,
 }

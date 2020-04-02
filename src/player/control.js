@@ -18,6 +18,7 @@ import {PLAYER, CONTROL} from '../redux/actions';
 // import { Toast } from '@ant-design/react-native';
 import { getRandomIntBetween, switchItems, toast, sleep } from '../utils/tools';
 import api from '../api';
+import Random from "../utils/random";
 
 let playerRef=null;
 
@@ -28,28 +29,28 @@ export const updateRef = (ref) => {
 const playList = [{
   id: 1,
   name: '无问东西',
-  artist: [{
+  artists: [{
     name: '周深',
   }],
   url: 'http://music.163.com/song/media/outer/url?id=1425818683.mp3',
 },{
   id: 2,
   name: '丑八怪超级长的名字到底会怎么样对不对级你偶就八角粉',
-  artist: [{
+  artists: [{
     name: '薛之谦',
   }],
   url: 'http://biliblue.com/static/music/%E8%96%9B%E4%B9%8B%E8%B0%A6/%E7%BB%85%E5%A3%AB/%E8%96%9B%E4%B9%8B%E8%B0%A6%20-%20%E6%BC%94%E5%91%98.m4a',
 }, {
   id: 3,
   name: '小情歌',
-  artist: [{
+  artists: [{
     name: '苏打绿',
   }],
   url: 'http://biliblue.com/static/music/%E8%8B%8F%E6%89%93%E7%BB%BF/%E5%B0%8F%E5%AE%87%E5%AE%99/%E8%8B%8F%E6%89%93%E7%BB%BF%20-%20%E5%B0%8F%E6%83%85%E6%AD%8C.m4a',
 },{
   id: 4,
   name: '富士山下',
-  artist: [{
+  artists: [{
     name: '陈奕迅',
   }],
   url: 'http://biliblue.com/static/music/%E5%BC%A0%E5%AE%87/%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6/%E5%BC%A0%E5%AE%87%20-%20%E7%94%A8%E5%BF%83%E8%89%AF%E8%8B%A6.m4a',
@@ -105,6 +106,14 @@ function test() {
   //     },
   //   }
   // });
+  // const r = new Random(40);
+  // console.log('list',r.list);
+  // let index = 5;
+  // [...Array(40)].forEach(()=>{
+  //   console.log(index);
+  //   index = r.getNext(index)
+  // });
+  // console.log(index);
 }
 test();
 
@@ -239,15 +248,11 @@ const unshiftListWithoutRepeat = (list, item) => {
 };
 
 export const playNext = (manual=true) => {
-  const { control: {mode, playList, playedList, currentIndex} } = store.getState();
-  const { control} = store.getState();
+  const { control: {mode, randomTable, currentIndex, playListObj: {data}} } = store.getState();
 
-  Toast.show('下一首', {
-    duration: 100,
-    position: -130,
-  });
+  toast('下一首');
 
-  console.log('playList', playList)
+  console.log('randomTable', randomTable);
   console.log('currentIndex', currentIndex)
   console.log('mode', mode);
   let nextSong = null;
@@ -258,76 +263,45 @@ export const playNext = (manual=true) => {
       if (manual) {
         console.log('manual ', manual)
         nextIndex = currentIndex + 1;
-        if (nextIndex >= playList.length) {
+        if (nextIndex >= data.length) {
           nextIndex = 0;
         }
       } else {
         nextIndex = currentIndex;
       }
-      nextSong = playList[currentIndex];
-      unshiftListWithoutRepeat(playedList, nextSong);
+      nextSong = data[currentIndex];
       break;
     case 'cycle':
       console.log('coming in cycle')
       nextIndex = currentIndex + 1;
-      if (nextIndex >= playList.length) {
+      if (nextIndex >= data.length) {
         nextIndex = 0;
       }
-      nextSong = playList[nextIndex];
-      unshiftListWithoutRepeat(playedList, nextSong);
+      nextSong = data[nextIndex];
       break;
-    // case 'sequence':
-    //   nextIndex = currentIndex + 1;
-    //   if (nextIndex >= playList.length) {
-    //     nextIndex = playList.length-1;
-    //     Toast.show('已经是最后了亲', {
-    //       duration: 300,
-    //       position: -130,
-    //     });
-    //     // Toast.info('已经是最后了亲', 1);
-    //   } else {
-    //     nextSong = playList[nextIndex];
-    //     unshiftListWithoutRepeat(playedList, nextSong);
-    //   }
-    //   break;
     case 'random':
       console.log('coming in random')
-      nextIndex = currentIndex + 1;
-      if (nextIndex >= playList.length) {
-        nextIndex = 0;
-      }
-      const pickedIndex = getRandomIntBetween(nextIndex, playList.length-1);
-      Toast.show(`picked id:${pickedIndex}`,{position: -100});
-      nextSong = playList[pickedIndex];
-      switchItems(playList, nextIndex, pickedIndex);
-      unshiftListWithoutRepeat(playedList, nextSong);
+      nextIndex = randomTable.getNext(currentIndex);
+      console.log('picked: ',nextIndex);
+      nextSong = data[nextIndex];
       break;
     default:
       break;
   }
-  Toast.show(`id:${nextIndex}`);
+  toast(`id:${nextIndex}`);
   store.dispatch({
     type: CONTROL.CURRENT_INDEX,
-    data:  nextIndex,
-  });
-  store.dispatch({
-    type: CONTROL.NEW_LIST,
     data: {
-      currentIndex: 0,
-      playListObj: {
-        name: '歌单名字',
-        data: playList,
-      },
-    }
+      currentIndex: nextIndex,
+    },
   });
-  console.log(nextIndex, nextSong)
-  if (nextSong) {
-    let url = nextSong.url;
-    if (!url) {
-      url = getUrlByID(nextSong.url)
-    }
-    playSong(url);
-  }
+  // store.dispatch({
+  //   type: PLAYER.DATA,
+  //   data: {
+  //     data: nextSong,
+  //   }
+  // });
+  console.log(nextIndex, nextSong);
 };
 
 export const playPrev = () => {

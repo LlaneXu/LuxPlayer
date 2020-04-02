@@ -21,7 +21,7 @@ import {
   Button,
 } from 'react-native';
 import {connect} from 'react-redux';
-import { PLAYER } from '../redux/actions';
+import {PLAYER, SLIDER} from '../redux/actions';
 import {secondToString} from '../utils/tools';
 import {updateRef, playOrPause, playSong, seek, playNext, onEndProcess, onErrorProcess, play} from './control'
 
@@ -109,17 +109,13 @@ class Player extends PureComponent {
     playableDuration	number	Position to where the media can be played to using just the buffer in seconds
     seekableDuration	number	Position to where the media can be seeked to in seconds. Typically, the total length of the media
     */
-    // console.log('onProgress', data);
+    console.log('onProgress', data);
     const { player: {duration} } = this.props;
-    this.props.dispatch({
-      type: PLAYER.STATUS,
-      data: {
-        ...data,
-        sliderProgress: data.currentTime/duration,
-        currentTimeReadable: secondToString(data.currentTime),
-      },
-    });
-    this.setState({playing:true})
+    // this.props.dispatch({
+    //   type: SLIDER.UPDATE,
+    //   data: data.currentTime/duration,
+    // });
+    // this.setState({playing:true})
   };
   onEnd = () => {
     /*

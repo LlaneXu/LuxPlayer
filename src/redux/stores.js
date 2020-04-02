@@ -32,6 +32,9 @@ export let store = createStore(reducer, {
     platformIndex: 0,
     data: {},
   },
+  slider: {
+    data: 0,
+  },
   control: {
     mode: 'cycle', //  random | cycle | cycleOne
     historyListObj: {
@@ -49,7 +52,7 @@ export let store = createStore(reducer, {
       name: '',
       data: [],
     },
-    playIndex: [],
+    randomTable: null,
     currentIndex: 0,
   },
   personalized: {

@@ -13,7 +13,8 @@
 
  ***/
 import { combineReducers } from 'redux';
-import { PLAYER, CONTROL, API } from "./actions";
+import { PLAYER, SLIDER, CONTROL, API } from "./actions";
+import Random from "../utils/random";
 
 const player = (state={}, action) =>  {
   switch (action.type) {
@@ -25,6 +26,17 @@ const player = (state={}, action) =>  {
       return {...state, id: action.data.id, data: action.data};
     default:
       return {...state};
+  }
+};
+
+const slider = (state={}, action) => {
+  switch (action.type) {
+    case SLIDER.CLEAR:
+      return {...state, data:0};
+    case SLIDER.UPDATE:
+      return {...state, data: action.data};
+    default:
+      return {...state}
   }
 };
 
@@ -76,6 +88,7 @@ const personalized = (state={}, action) =>  {
 
 const combinedReducer = combineReducers({
   player,
+  slider,
   control,
   personalized,
 });
@@ -104,6 +117,7 @@ const crossSliceReducer = (state, action) => {
         control = {
           ...control,
           currentIndex: data.currentIndex,
+          randomTable: new Random(data.playListObj.data.length),
           playListObj: data.playListObj,
           lastListObj: control.playListObj,
           historyListObj: control.lastListObj,
@@ -121,15 +135,17 @@ const crossSliceReducer = (state, action) => {
         };
       }
     case CONTROL.CURRENT_INDEX:
+      console.log('control.playListObj.data',control.playListObj.data)
+      console.log('data.currentIndex',data.currentIndex)
       control = {
         ...control,
         currentIndex: data.currentIndex,
       };
       player = {
         ...player,
-        id: data.playListObj.data[data.currentIndex].id,
+        id: control.playListObj.data[data.currentIndex].id,
         platformIndex: 0,
-        data: data.playListObj.data[data.currentIndex],
+        data: control.playListObj.data[data.currentIndex],
       };
       return {
         ...state,
@@ -141,6 +157,7 @@ const crossSliceReducer = (state, action) => {
   }
 };
 
+// export default combinedReducer;
 export default (state, action) => {
   const intermediateState = combinedReducer(state, action);
   return crossSliceReducer(intermediateState, action)
