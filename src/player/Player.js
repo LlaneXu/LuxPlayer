@@ -111,10 +111,13 @@ class Player extends PureComponent {
     */
     console.log('onProgress', data);
     const { player: {duration} } = this.props;
-    // this.props.dispatch({
-    //   type: SLIDER.UPDATE,
-    //   data: data.currentTime/duration,
-    // });
+    this.props.dispatch({
+      type: SLIDER.UPDATE,
+      data: {
+        progress: data.currentTime/duration,
+        currentTime: data.currentTime,
+      }
+    });
     // this.setState({playing:true})
   };
   onEnd = () => {

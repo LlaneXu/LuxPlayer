@@ -33,7 +33,8 @@ export let store = createStore(reducer, {
     data: {},
   },
   slider: {
-    data: 0,
+    currentTime: 0,
+    progress: 0,
   },
   control: {
     mode: 'cycle', //  random | cycle | cycleOne

@@ -37,19 +37,14 @@ import {
 } from "native-base";
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMateriallcons from 'react-native-vector-icons/MaterialIcons';
-import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
-import Slider from '@react-native-community/slider';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { connect } from 'react-redux';
 
 import { screen } from '../utils';
-import { playOrPause, playNext, playPrev, changeMode, seek } from './control';
-import api from '../api';
+import { playOrPause, playNext, playPrev } from './control';
 import RepeatMode from '../widget/RepeatMode';
-// import PopUp from '../widget/PopUp';
-import { modeOptions } from '../redux/stores';
 import PlayList from "../widget/PlayList";
-import Provider from "react-redux/es/components/Provider";
+// import Progress from '../widget/Progress';
 
 class PlayerView extends PureComponent {
   state = {
@@ -77,16 +72,16 @@ class PlayerView extends PureComponent {
       //   return null;
       // })
     }
-    if (!prevState.sliding) {
-      const updateData = {};
-      if (player.sliderProgress !== prevState.sliderProgress) {
-        updateData.sliderProgress = player.sliderProgress;
-      }
-      if (player.playing !== prevState.playing) {
-        updateData.playing = player.playing;
-      }
-      return updateData;
-    }
+    // if (!prevState.sliding) {
+    //   const updateData = {};
+    //   if (player.sliderProgress !== prevState.sliderProgress) {
+    //     updateData.sliderProgress = player.sliderProgress;
+    //   }
+    //   if (player.playing !== prevState.playing) {
+    //     updateData.playing = player.playing;
+    //   }
+    //   return updateData;
+    // }
     return null;
   }
   componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
@@ -114,8 +109,8 @@ class PlayerView extends PureComponent {
     })
   };
   animateControl = (playing) => {
-    this.circling(playing);
-    this.topAnimate(playing);
+    // this.circling(playing);
+    // this.topAnimate(playing);
   };
 
   circling = (start=true) => {
@@ -203,7 +198,8 @@ class PlayerView extends PureComponent {
   render(): React.ReactNode {
     const { navigation } = this.props;
     const {data, playing} = this.state;
-    console.log(data)
+    console.log('still refreshing')
+    console.log(this.props.player)
     const artist = data.artists.map(item => item.name).join('&');
     const { sliderProgress, songListVisible } = this.state;
     return (
@@ -259,17 +255,18 @@ class PlayerView extends PureComponent {
               </Text>
             </Left>
             <Body>
-            <Slider
-              maximumTrackTintColor={'#ffffff'}
-              minimumTrackTintColor={'orangered'}
-              thumbTintColor={'white'}
-              // thumbStyle={styles.thumb}
-              // trackStyle={{height: 2}}
-              style={{width: screen.width - 100}}
-              value={sliderProgress}
-              onSlidingStart={ () => {this.setState({sliding: true})}}
-              onSlidingComplete={value => {this.setState({sliding: false});seek(value);}}
-            />
+            {/*<Progress />*/}
+            {/*<Slider*/}
+              {/*maximumTrackTintColor={'#ffffff'}*/}
+              {/*minimumTrackTintColor={'orangered'}*/}
+              {/*thumbTintColor={'white'}*/}
+              {/*// thumbStyle={styles.thumb}*/}
+              {/*// trackStyle={{height: 2}}*/}
+              {/*style={{width: screen.width - 100}}*/}
+              {/*value={sliderProgress}*/}
+              {/*onSlidingStart={ () => {this.setState({sliding: true})}}*/}
+              {/*onSlidingComplete={value => {this.setState({sliding: false});seek(value);}}*/}
+            {/*/>*/}
             </Body>
             <Right>
               <Text style={{color: 'white'}}>

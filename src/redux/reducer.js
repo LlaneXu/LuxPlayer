@@ -32,9 +32,9 @@ const player = (state={}, action) =>  {
 const slider = (state={}, action) => {
   switch (action.type) {
     case SLIDER.CLEAR:
-      return {...state, data:0};
+      return {};
     case SLIDER.UPDATE:
-      return {...state, data: action.data};
+      return {...state, ...action.data};
     default:
       return {...state}
   }
